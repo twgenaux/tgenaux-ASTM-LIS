@@ -1,0 +1,45 @@
+# ASTM Patient Record Map
+PatientRecord:P.1
+PatSeqNumber:P.2
+PatPracticePID:P.3
+PatLabPID:P.4
+PatPID3:P.5
+PatNatPID3:P.5.1.1
+PatMedPID3:P.5.1.2
+PatOtherPID3:P.5.1.3
+PatFullName:P.6
+PatLastName:P.6.1.1
+PatFirstName:P.6.1.2
+PatMidInital:P.6.1.3
+PatMothersMaiden:P.7
+PatBirthDate:P.8
+PatSex:P.9
+PatReservedField:P.12
+PatAttendPhy:P.14
+PatPhyID:P.14.1.1
+PatPhyLastName:P.14.1.2
+PatPhyFirstName:P.14.1.3
+PatPhyMidInital:P.14.1.4
+PatBirthSurname:P.15
+
+# ASTM Order Record Map
+OrderRecord:O.1
+OrderSeqNumber:O.2
+OrderSampleIDs:O.3
+OrderSampleID1:O.3.1
+OrderSampleID2:O.3.2
+OrderProfiles:O.5 # Veriable content, needs special processing
+OrderPriority:O.6
+OrderReqDateTime:O.7
+OrderSampleSampleCollection:O.8
+OrderActionCode:O.12
+OrderQcExpectedResults:O.14
+OrderSampleTypes:O.16
+OrderSampleType1:O.16.1
+OrderSampleType2:O.16.2
+OrderSaveCassettes:O.19
+OrderErrorMsg:O.20
+OrderReported:O.23
+OrderResultType:O.26
+OrderCollectionLocation:O.28
+
