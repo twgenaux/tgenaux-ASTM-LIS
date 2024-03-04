@@ -5,7 +5,7 @@ author: [ Theron W. Genaux, Draft, 3-March-2024]
 tags: [LIS,ASTM,E1394,LIS02]
 ---
 
-Demonstrates generically extracting the contents of ASTM  E1394 messages. The contents can then be written directly to a database or can be converted to XML and json files. The code was designed to support round-tripping, such that a the extracted content can be used to recreate the original message.
+Demonstrates generically extracting the contents of ASTM  E1394 messages. The contents can then be written directly to a database or can be converted to XML and json files. The code was designed to support round-tripping, such that the extracted content can be used to recreate the original message.
 
 
 
