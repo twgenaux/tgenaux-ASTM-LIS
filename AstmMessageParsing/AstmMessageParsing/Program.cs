@@ -90,7 +90,7 @@ namespace tgenaux.astm
                     messageParsing.TranslationRecordMap = AstmRecordMap.ReadAstmTranslationRecordMap(translationMapPathname);
                 }
 
-                List<Dictionary<string, string>> mappedMessage = messageParsing.ParseMessage(path, translationMapPathname);
+                List<Dictionary<string, string>> mappedMessage = messageParsing.ParseMessage(path);
 
                 foreach (var record in mappedMessage)
                 {
