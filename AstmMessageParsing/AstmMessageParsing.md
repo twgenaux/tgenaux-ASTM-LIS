@@ -19,7 +19,7 @@ In 2015 I started working with vendors and customers to help them interface with
 
 I have already seen some code that reads and writes ASTM messages, both on the web and proprietary. And I always thought that they were error prone to use and and overly complex. When working on updating some code, my unit testing showed that I had made an off-by-one error. I started to wonder how it could be generalized so that it could adapt to all the variations that I've seen. I also wondered how to make it less error prone.
 
-
+I played around with this for a while until I realized that an ASTM record is a recursive data structure. It has 3 delimiters, Field, Repeat-Field, and Components. Because it only has 3 delimiters, recursion is limited to only 3 levels.
 
 When I develop software, I try to design it so that other developers will find it be easy to use correctly, and hard to use incorrectly. 
 
