@@ -85,8 +85,6 @@ namespace tgenaux.astm
             string delimiters = @"|\^"; // default
             string escape = @"&"; // default
 
-            // TODO return a list of disctionaries
-
             foreach (var line in message)
             {
                 string text = line;
@@ -95,7 +93,7 @@ namespace tgenaux.astm
                 {
                     delimiters = text.Substring(1, 3);
                     escape = text.Substring(4, 1);
-                    text = text.Substring(5);  // remove the delimitors
+                    text = text.Substring(5);  // remove the delimitors for ease of paring the H record
                     text = "H|" + text;
                 }
                 Record record = new Record() { RecordType = text.Substring(0, 1), Delimiters = delimiters, Escape = escape, Text = text };
