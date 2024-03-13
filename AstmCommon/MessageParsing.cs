@@ -101,7 +101,8 @@ namespace tgenaux.astm
                     escape = text.Substring(6, 1); // \
                     text = text.Substring(0,3) + text.Substring(8);  // remove the delimitors for ease of paring the MSH record
                 }
-                Record record = new Record() { RecordType = text.Substring(0, 1), Delimiters = delimiters, Escape = escape, Text = text };
+                Record record = new Record() { Delimiters = delimiters, Escape = escape, Text = text };
+                record.RecordType = record.Get("1"); // first filed contains the Record Type
 
                 Dictionary<string, string> fields = record.GetItems(); // Extracts all field information from record 
 
