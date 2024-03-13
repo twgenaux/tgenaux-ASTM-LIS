@@ -83,7 +83,7 @@ namespace tgenaux.astm
             {
                 MessageParsing messageParsing = new MessageParsing();
 
-                messageParsing.OnlyMapped = OnlyMapped;
+                messageParsing.OnlyMapped = OnlyMapped; // If true, only exports mapped fields
 
                 if (File.Exists(translationMapPathname))
                 {
@@ -109,16 +109,26 @@ namespace tgenaux.astm
         // The translation map pathname
         static string translationMapPathname = "";
 
+        /// <summary>
+        /// If true, only exports mapped fields
+        /// </summary>
         static bool OnlyMapped = false;
 
-        static  bool ParseArgs(string[] args)
+        /// <summary>
+        /// Parse command line args
+        /// </summary>
+        /// <param name="args">command line args</param>
+        /// <returns>Returs false if usage should be displayed</returns>
+        static bool ParseArgs(string[] args)
         {
             foreach (var arg in args)
             {
-                if (arg.IndexOf("help", StringComparison.CurrentCultureIgnoreCase) >= 0)
+                if ((arg.IndexOf("help", StringComparison.CurrentCultureIgnoreCase) >= 0) ||
+                    (arg.IndexOf("?", StringComparison.CurrentCultureIgnoreCase) >= 0))
                 {
-                    return false;
+                    return false; // display usage
                 }
+                // Translation map pathname
                 else if (arg.IndexOf("/TransMap:", StringComparison.CurrentCultureIgnoreCase) >= 0)
                 {
                     string text = arg.Remove(0, "/TransMap:".Length);
@@ -135,6 +145,7 @@ namespace tgenaux.astm
                         return false;
                     }
                 }
+                // Report onlly translation mapped fields
                 else if (arg.IndexOf("/onlyMapped", StringComparison.CurrentCultureIgnoreCase) >= 0)
                 {
                     OnlyMapped = true;
@@ -154,6 +165,7 @@ namespace tgenaux.astm
                 }
             }
 
+            // Must have at least one ASTM message file
             if (paths.Count <= 0)
             {
                 return false;

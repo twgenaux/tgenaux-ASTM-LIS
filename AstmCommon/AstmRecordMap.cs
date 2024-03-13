@@ -126,7 +126,7 @@ namespace tgenaux.astm
                 }
                 catch (Exception e)
                 {
-                    // TODO
+                    Console.WriteLine(e.ToString());
                 }
             }
             return map;
@@ -177,7 +177,7 @@ namespace tgenaux.astm
                 }
                 catch (Exception e)
                 {
-                    // TODO
+                    Console.WriteLine(e.ToString() );
                 }
             }
             return map;
