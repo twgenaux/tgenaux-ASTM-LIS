@@ -244,6 +244,8 @@ namespace tgenaux.astm
 
         /// <summary>
         /// Gets the content of a record as a field address and value dictionary
+        /// 
+        /// This initializes parameters and calls the recursive GetItems method.
         /// </summary>
         /// <param name="recordType">The record type</param>
         /// <param name="delimiters">The delimiters </param>
