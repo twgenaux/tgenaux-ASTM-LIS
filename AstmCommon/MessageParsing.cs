@@ -104,7 +104,9 @@ namespace tgenaux.astm
 
                 else if (text.Substring(0,3) == "MSH")  // MSH|^~\&|  - Filed (|), Componet (^), Repetition (~). Subcomponent (&) Escape (\)
                 {
-                    delimiters = text.Substring(3, 3) + text.Substring(7, 1); // HL7 delimiters |^~&
+                    // TODO: HL7 delimiters |^~& Needs to be ordered as Field, Repeat, Composit, Sub-Composit => |~^&
+                    // https://www.qvera.com/kb/index.php/440/please-explain-the-use-of-a-tilde-or-squiggly-in-the-hpath
+                    delimiters = text.Substring(3, 3) + text.Substring(7, 1); 
                     escape = text.Substring(6, 1); // \
                     text = text.Substring(0,3) + text.Substring(8);  // remove the delimitors for ease of paring the MSH record
                 }
