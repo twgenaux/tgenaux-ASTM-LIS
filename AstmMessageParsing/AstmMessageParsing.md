@@ -1,7 +1,7 @@
 ---
 title: ASTM E1394 Message Parsing
 category: ASTM E1394
-author: [ Theron W. Genaux, Draft, 3-March-2024]
+author: [ Theron W. Genaux, Draft, 13-March-2024]
 tags: [LIS,ASTM,E1394,LIS02]
 ---
 
