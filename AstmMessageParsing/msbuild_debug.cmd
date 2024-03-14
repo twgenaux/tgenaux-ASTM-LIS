@@ -9,8 +9,6 @@ REM Visual Studio MSBUILD path
 
 @del .\msbuild_debug.log
 
-REM Must be build based on dependencies. Build with Visual Studio and copy the order.
-@%MSBUILD% ..\AstmCommon\AstmCommon.csproj %FLAGS%
 @%MSBUILD% .\AstmMessageParsing\AstmMessageParsing.csproj %FLAGS%
 
 pause

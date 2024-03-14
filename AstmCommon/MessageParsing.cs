@@ -89,12 +89,19 @@ namespace tgenaux.astm
             {
                 string text = line;
 
-                if (text.Substring(0,1) == "H")
+                // Skip empty or comment lines (#)
+                if (string.IsNullOrEmpty(line) || line.Trim().StartsWith("#"))
+                {
+                    continue;
+                }
+
+                else if (text.Substring(0,1) == "H")
                 {
                     delimiters = text.Substring(1, 3);
                     escape = text.Substring(4, 1);
                     text = text.Substring(0, 2) + text.Substring(5);  // remove the delimitors for ease of paring the MSH record
                 }
+
                 else if (text.Substring(0,3) == "MSH")  // MSH|^~\&|  - Filed (|), Componet (^), Repetition (~). Subcomponent (&) Escape (\)
                 {
                     delimiters = text.Substring(3, 3) + text.Substring(7, 1); // HL7 delimiters |^~&
