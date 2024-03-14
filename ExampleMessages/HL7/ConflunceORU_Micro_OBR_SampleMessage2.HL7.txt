@@ -1,0 +1,54 @@
+# Test processing HL7
+# Addresses are based on the following:
+# https://www.qvera.com/kb/index.php/440/please-explain-the-use-of-a-tilde-or-squiggly-in-the-hpath
+#
+# Conflunce ORU_Micro Sample Messages, 14-March-2024
+# https://confluence.hl7.org/display/OO/ORU_Micro
+#
+# Created by Hans Buitendijk on Oct 15, 2019
+#
+# From Message 2:
+
+# Defines the delimiters for processing the OBR segment
+MSH|^~\&
+
+# This record has all the delimiters
+OBR|3|2108511585^HNAM_ORDERI||CD:312370^MIC|||20190331102800.0000-0400|||||||20190331111500.0000-0400|88&Tissue|1727^ABC^DEC||||000002019090001260^HNA_ACCN~13473109^HNA_ACCNID||20190405141237.0000-0400||Micro|M|^2^Ent&Enteroco|1^^^^^1
+
+# AstmMessageParsing Output
+# MSH.1:MSH
+# OBR.1:OBR
+# OBR.2:3
+# OBR.3:2108511585^HNAM_ORDERI
+# OBR.3.1.1:2108511585
+# OBR.3.1.2:HNAM_ORDERI
+# OBR.5:CD:312370^MIC
+# OBR.5.1.1:CD:312370
+# OBR.5.1.2:MIC
+# OBR.8:20190331102800.0000-0400
+# OBR.15:20190331111500.0000-0400
+# OBR.16:88&Tissue
+# OBR.16.1.1.1:88
+# OBR.16.1.1.2:Tissue
+# OBR.17:1727^ABC^DEC
+# OBR.17.1.1:1727
+# OBR.17.1.2:ABC
+# OBR.17.1.3:DEC
+# OBR.21:000002019090001260^HNA_ACCN~13473109^HNA_ACCNID
+# OBR.21.1:000002019090001260^HNA_ACCN
+# OBR.21.1.1:000002019090001260
+# OBR.21.1.2:HNA_ACCN
+# OBR.21.2:13473109^HNA_ACCNID
+# OBR.21.2.1:13473109
+# OBR.21.2.2:HNA_ACCNID
+# OBR.23:20190405141237.0000-0400
+# OBR.25:Micro
+# OBR.26:M
+# OBR.27:^2^Ent&Enteroco
+# OBR.27.1.2:2
+# OBR.27.1.3:Ent&Enteroco
+# OBR.27.1.3.1:Ent
+# OBR.27.1.3.2:Enteroco
+# OBR.28:1^^^^^1
+# OBR.28.1.1:1
+# OBR.28.1.6:1

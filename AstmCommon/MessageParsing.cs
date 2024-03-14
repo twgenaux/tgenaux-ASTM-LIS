@@ -102,13 +102,20 @@ namespace tgenaux.astm
                     text = text.Substring(0, 2) + text.Substring(5);  // remove the delimitors for ease of paring the MSH record
                 }
 
-                else if (text.Substring(0,3) == "MSH")  // MSH|^~\&|  - Filed (|), Componet (^), Repetition (~). Subcomponent (&) Escape (\)
+                else if (text.Substring(0,3) == "MSH")  // MSH|^~\&  - Feild (|), Componet (^), Repetition (~), (&) Escape (\), Subcomponent
                 {
                     // TODO: HL7 delimiters |^~& Needs to be ordered as Field, Repeat, Composit, Sub-Composit => |~^&
                     // https://www.qvera.com/kb/index.php/440/please-explain-the-use-of-a-tilde-or-squiggly-in-the-hpath
-                    delimiters = text.Substring(3, 3) + text.Substring(7, 1); 
+                    // 012345678
+                    // MSH|^~\&|
+                    delimiters = text.Substring(3,1); // Feild (|)
+                    delimiters += text.Substring(5,1); // Repetition (~)
+                    delimiters += text.Substring(4,1); // Componet (^)
+                    delimiters += text.Substring(7,1); // Subcomponent (&)
+
                     escape = text.Substring(6, 1); // \
-                    text = text.Substring(0,3) + text.Substring(8);  // remove the delimitors for ease of paring the MSH record
+
+                    text = text.Substring(0,4) + text.Substring(8);  // remove the delimitors for ease of paring the MSH record
                 }
                 Record record = new Record() { Delimiters = delimiters, Escape = escape, Text = text };
                 record.RecordType = record.Get("1"); // first filed contains the Record Type
