@@ -7,7 +7,7 @@ tags: [LIS,ASTM,E1394,LIS02]
 
 Demonstrates generically extracting the contents of ASTM  E1394 messages. The contents can then be written directly to a database or converted to XML and json files. The code was designed to support round-tripping, such that the extracted content can be used to recreate the original message.
 
-This code is the result of exploring two goals; generically reading and writing ASTM messages and two, creating bi-directional maps to map orders, patients, and results between a database and ASTM messages. 
+This project is the result of exploring two goals; generically reading and writing ASTM messages and two, using bi-directional maps to map database orders, patients, and results for the creation and reading ASTM messages. 
 
 This code also works with HL7 Version 2.5 message files.
 
