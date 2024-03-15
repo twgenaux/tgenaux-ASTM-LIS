@@ -5,13 +5,13 @@ author: [ Theron W. Genaux, Draft, 13-March-2024]
 tags: [LIS,ASTM,E1394,LIS02]
 ---
 
-Demonstrates generically extracting the contents of ASTM  E1394 messages. The contents can then be written directly to a database or converted to XML and json files. The code was designed to support round-tripping, such that the extracted content can be used to recreate the original message.
+# ASTM E1394 Message Parsing
 
-This project is the result of exploring two goals; generically reading and writing ASTM messages and two, using bi-directional maps to map database orders, patients, and results for the creation and reading ASTM messages. 
+This project is the result of exploring two goals; generically reading and writing ASTM messages and using bi-directional maps to map database orders, patients, and results to create and read ASTM messages.
 
-This code also works with HL7 Version 2.5 message files.
+This project also works with HL7 Version 2.5 messages.
 
-In 2015 I started working with vendors and customers to help them interface with my company's new instrument. The message format was ASTM E1394 (ASTM). I started to wonder how LIS and middleware vendors were able to adapt to connecting with so many instruments where each instrument manufacturer developed their own format based on the ASTM E1394 standard.
+In 2015 I started working with vendors and customers to help them interface with my company's new instrument. The message format followed the ASTM E1394 (ASTM) standard. I started to wonder how LIS and middleware vendors were able to adapt to connecting with so many instruments where each instrument manufacturer developed their own format based on the ASTM E1394 standard.
 
 I had already seen some code that reads and writes ASTM messages, both on the web and proprietary. And I always thought that they were error prone to use and and overly complex. When working on adding to such code, my unit testing showed that I made an off-by-one error. I started to wonder how reading, writng, and processing ASTM messaging could be generalized so that one could adapt to all the variations that I've seen. I also wondered how to make it less error prone.
 
