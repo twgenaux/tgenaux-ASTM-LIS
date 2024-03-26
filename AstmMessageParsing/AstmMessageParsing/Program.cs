@@ -24,12 +24,14 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Linq;
 
 namespace tgenaux.astm
 {
     internal class Program
     {
-
+        #region Usage
         static void Usage()
         {
             // Show usage
@@ -70,7 +72,9 @@ namespace tgenaux.astm
             Console.WriteLine("         2 is the componet index.");
             Console.WriteLine("");
         }
+        #endregion
 
+        #region Main
         static void Main(string[] args)
         {
             if (!ParseArgs(args))
@@ -90,19 +94,52 @@ namespace tgenaux.astm
                     messageParsing.TranslationRecordMap = AstmRecordMap.ReadAstmTranslationRecordMap(translationMapPathname);
                 }
 
-                List<Dictionary<string, string>> mappedMessage = messageParsing.ParseMessage(path);
+                string[] msg = File.ReadAllLines(path);
 
-                foreach (var record in mappedMessage)
+                List<Dictionary<string, string>> mappedMessage = messageParsing.ParseMessage(msg.ToList());
+
+                DumpMappedMessage(mappedMessage);
+                Console.WriteLine();
+
+                // Round Trip
+                string delimiters = @"|\^&";
+                string septerators = @"|\^";
+                string escape = @"&";
+
+                // TODO Use a translation map to extract the information and to round-trp the message
+
+                List<string> roundTripMsg = messageParsing.CreateMessge(septerators, escape, delimiters, mappedMessage);
+
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine($"{string.Join("\r\n", msg)}");
+                Console.WriteLine();
+
+                Console.WriteLine();
+                Console.WriteLine($"{string.Join("\r\n", roundTripMsg)}");
+                Console.WriteLine();
+            }
+            Console.WriteLine();
+
+        }
+        #endregion
+
+        static void DumpMappedMessage(List<Dictionary<string, string>> mappedMessage)
+        {
+            foreach (var record in mappedMessage)
+            {
+                foreach (var key in record.Keys)
                 {
-                    foreach (var key in record.Keys)
+                    if (key[0] != '_')
                     {
                         Console.WriteLine($"{key}:{record[key]}");
                     }
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine();
         }
+
+        #region Parse Args
 
         static List<string> paths = new List<string>();
 
@@ -173,5 +210,6 @@ namespace tgenaux.astm
 
             return true;
         }
+        #endregion
     }
 }

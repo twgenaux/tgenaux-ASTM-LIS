@@ -49,6 +49,18 @@ namespace tgenaux.astm
             Map = new Dictionary<string, string>();
         }
 
+        public List<string> ToList()
+        {
+            List<string> list = new List<string>();
+
+            foreach (string key in Map.Keys) 
+            {
+                list.Add($"{key}:{Map[key]}");
+            }
+
+            return list;
+        }
+
         /// <summary>
         /// RemapRecord 
         /// </summary>

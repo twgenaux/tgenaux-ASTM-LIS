@@ -45,16 +45,20 @@ namespace tgenaux.astm
     public class Record
     {
         /// <summary>
-        /// Delimiters are an ordered set of characters used to partition the
-        /// data elements within the record. The first character is the field
-        /// delimiter followed by repeat, component.
+        /// Separators - an ordered set of characters for partitioning 
+        /// the data elements within the record. 
         /// </summary>
-        public string Delimiters { get; set; }
+        public string Separators { get; set; }
 
         /// <summary>
-        /// The escape delimiter. Used to escape delimiters in text fields
+        /// The escape delimiter. Used to escape delimiters/seperators in text fields
         /// </summary>
         public string Escape { get; set; }
+
+        /// <summary>
+        /// Delimiters are an ordered list of characters as defined by standard. 
+        /// </summary>
+        public string Delimiters { get; set; }
 
         /// <summary>
         /// The record type ID (first filed in a record)
@@ -79,7 +83,7 @@ namespace tgenaux.astm
 
         public Record()
         {
-            Delimiters = "";
+            Separators = "";
             Fields = new List<string>();
         }
 
@@ -89,7 +93,7 @@ namespace tgenaux.astm
         /// <param name="text">The delimited line of text</param>
         private void ParseFields(string text)
         {
-            string[] fields = text.Split(Delimiters[0]);
+            string[] fields = text.Split(Separators[0]);
             Fields = fields.ToList();
         }
 
@@ -99,7 +103,7 @@ namespace tgenaux.astm
         /// <returns>The Fields as a delimited line of text</returns>
         private string GetText()
         {
-            string fields = string.Join(Delimiters[0].ToString(), Fields);
+            string fields = string.Join(Separators[0].ToString(), Fields);
             return fields;
         }
 
@@ -108,7 +112,7 @@ namespace tgenaux.astm
         /// </summary>
         /// <param name="column">The field index</param>
         /// <param name="value">The field value</param>
-        private void Set(int column, string value)
+        public void Set(int column, string value)
         {
             while (Fields.Count() < column)
             {
@@ -154,7 +158,7 @@ namespace tgenaux.astm
             List<string> address = _address.Split(seps).ToList();
 
             int level = -1;
-            value = Get(level, this.Delimiters, address);
+            value = Get(level, this.Separators, address);
 
             return value;
         }
@@ -183,9 +187,9 @@ namespace tgenaux.astm
                 else
                 {
                     Record record = new Record();
-                    record.Delimiters = this.Delimiters.Substring(1);
+                    record.Separators = this.Separators.Substring(1);
                     record.Text = this.Get(column);
-                    value = record.Get(level, record.Delimiters, address);
+                    value = record.Get(level, record.Separators, address);
                 }
             }
             return value;
@@ -202,7 +206,7 @@ namespace tgenaux.astm
             List<string> address = _address.Split(seps).ToList();
 
             int level = -1;
-            Set(level, this.Delimiters, address, value);
+            Set(level, this.Separators, address, value);
         }
 
         /// <summary>
@@ -224,9 +228,9 @@ namespace tgenaux.astm
             else
             {
                 Record record = new Record();
-                record.Delimiters = this.Delimiters.Substring(1);
+                record.Separators = this.Separators.Substring(1);
                 record.Text = this.Get(column);
-                record.Set(level, record.Delimiters, address, value);
+                record.Set(level, record.Separators, address, value);
                 this.Set(column, record.Text);
             }
         }
@@ -237,7 +241,7 @@ namespace tgenaux.astm
         /// <returns>the content of a record as a field address and value dictionary</returns>
         public Dictionary<string, string> GetItems()
         {
-            Dictionary<string, string> items =  GetItems(this.RecordType, this.Delimiters, this.Escape, this.Text);
+            Dictionary<string, string> items =  GetItems(this.RecordType, this.Separators, this.Escape, this.Text);
 
             return items;
         }
@@ -278,7 +282,7 @@ namespace tgenaux.astm
             if (delimiters.Length <= 0)
                 return;
 
-            Record record = new Record() { Delimiters = delimiters, Text = segment };
+            Record record = new Record() { Separators = delimiters, Text = segment };
 
             int pos = 0;
             foreach (var s in record.Fields)
