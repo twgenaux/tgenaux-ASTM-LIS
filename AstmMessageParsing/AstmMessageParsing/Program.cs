@@ -135,7 +135,6 @@ namespace tgenaux.astm
                         Console.WriteLine($"{key}:{record[key]}");
                     }
                 }
-                Console.WriteLine();
             }
         }
 

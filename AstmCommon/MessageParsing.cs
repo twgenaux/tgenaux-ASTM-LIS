@@ -163,7 +163,11 @@ namespace tgenaux.astm
             {
                 AstmRecordMap recMap = new AstmRecordMap() { Map = mappedRecord };
                 string text = CreateRecord(seperators, escape, delimitors, recMap);
-                message.Add(text);
+
+                if (text.Length > 0)
+                {
+                    message.Add(text);
+                }
             }
 
             return message;
@@ -177,7 +181,9 @@ namespace tgenaux.astm
             record.Delimiters = delimitors;
             record.RecordType = recordMap.Map["_Type"];
 
-            foreach (var key in recordMap.Map.Keys)
+            Dictionary<string, string> mapped = AstmRecordMap.RemapRecord(recordMap.Map, TranslationRecordMap, OnlyMapped);
+
+            foreach (var key in mapped.Keys)
             {
                 if (key[0] != '_')
                 {
@@ -186,8 +192,7 @@ namespace tgenaux.astm
                     {
                         address = address.Substring(2);
                     }
-                    string value = recordMap.Map[key];
-                    record.Set(address, recordMap.Map[key]);
+                    record.Set(address, mapped[key]);
                 }
             }
 
