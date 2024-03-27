@@ -94,11 +94,26 @@ namespace tgenaux.astm
                     messageParsing.TranslationRecordMap = AstmRecordMap.ReadAstmTranslationRecordMap(translationMapPathname);
                 }
 
+                AstmRecordMap transMap = new AstmRecordMap();
+                if (File.Exists(translationMapPathname))
+                {
+                    transMap = AstmRecordMap.ReadAstmTranslationRecordMap(translationMapPathname);
+                }
+
+
                 string[] msg = File.ReadAllLines(path);
 
-                List<Dictionary<string, string>> mappedMessage = messageParsing.ParseMessage(msg.ToList());
+                List<Dictionary<string, string>> mappedMessage1 = MessageParsing.ParseMessage(msg.ToList(), false, new AstmRecordMap());
 
-                DumpMappedMessage(mappedMessage);
+                DumpMappedMessage(mappedMessage1);
+                Console.WriteLine();
+
+                List<Dictionary<string, string>> mappedMessage2 = AstmRecordMap.RemapRecord(mappedMessage1, transMap, true);
+                DumpMappedMessage(mappedMessage2);
+                Console.WriteLine();
+
+                List<Dictionary<string, string>> mappedMessage3 = AstmRecordMap.RemapRecord(mappedMessage2, transMap, true);
+                DumpMappedMessage(mappedMessage3);
                 Console.WriteLine();
 
                 // Round Trip
@@ -106,9 +121,7 @@ namespace tgenaux.astm
                 string septerators = @"|\^";
                 string escape = @"&";
 
-                // TODO Use a translation map to extract the information and to round-trp the message
-
-                List<string> roundTripMsg = messageParsing.CreateMessge(septerators, escape, delimiters, mappedMessage);
+                List<string> roundTripMsg = MessageParsing.CreateMessge(septerators, escape, delimiters, mappedMessage3, false, new AstmRecordMap());
 
                 Console.WriteLine();
                 Console.WriteLine();

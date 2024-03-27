@@ -67,7 +67,7 @@ namespace tgenaux.astm
             
             List<string> lines = File.ReadAllLines(pathanme).ToList();
 
-            var messageContent = ParseMessage(lines);
+            var messageContent = this.ParseMessage(lines);
 
             return messageContent;
         }
@@ -79,8 +79,18 @@ namespace tgenaux.astm
         /// <returns>A list of dictionaries with the extracted message content. One dictionary per record</returns>
         public List<Dictionary<string, string>> ParseMessage(List<string> message)
         {
+            List<Dictionary<string, string>> mappedMessage = MessageParsing.ParseMessage(message, OnlyMapped, TranslationRecordMap);
+
+            return mappedMessage;
+        }
+
+
+        public static List<Dictionary<string, string>> ParseMessage(List<string> message, bool OnlyMapped, AstmRecordMap translationMap)
+        {
             // list of dictionaries with the extracted message content, one for each record
             List<Dictionary<string, string>> mappedMessage = new List<Dictionary<string, string>>();
+
+            string msgType = "ASTM";
 
             string standardDelimiters = "";
             string septerators = @"|\^"; // default
@@ -88,30 +98,35 @@ namespace tgenaux.astm
 
             foreach (var line in message)
             {
-                Record record = new Record() { Separators = septerators, Escape = escape};
+                Record record = new Record() { Separators = septerators, Escape = escape };
 
                 string text = line;
 
                 // Skip empty or comment lines (#)
+                // Comment lines must start with #
+                // End of line comments are not supported
                 if (string.IsNullOrEmpty(line) || line.Trim().StartsWith("#"))
                 {
                     continue;
                 }
 
                 // ASTM 
-                else if (text.Substring(0,1) == "H")
+                else if (text.Substring(0, 1) == "H")
                 {
+                    msgType = "ASTM";
                     standardDelimiters = text.Substring(1, 4);
                     record.Delimiters = standardDelimiters;
 
                     septerators = text.Substring(1, 3);
                     escape = text.Substring(4, 1);
-                    
+
                     text = text.Substring(0, 2) + text.Substring(5);  // remove the delimitors for ease of paring the MSH record
                 }
 
-                else if (text.Substring(0,3) == "MSH")  // MSH|^~\&  - Feild (|), Componet (^), Repetition (~), (&) Escape (\), Subcomponent
+                // HL7
+                else if (text.Substring(0, 3) == "MSH")  // MSH|^~\&  - Feild (|), Componet (^), Repetition (~), (&) Escape (\), Subcomponent
                 {
+                    msgType = "HL7";
                     // TODO: HL7 septerators |^~& Needs to be ordered as Field, Repeat, Composit, Sub-Composit => |~^&
                     // https://www.qvera.com/kb/index.php/440/please-explain-the-use-of-a-tilde-or-squiggly-in-the-hpath
                     // 012345678
@@ -119,33 +134,36 @@ namespace tgenaux.astm
                     standardDelimiters = text.Substring(3, 5);
                     record.Delimiters = standardDelimiters;
 
-                    septerators = text.Substring(3,1); // Feild (|)
-                    septerators += text.Substring(5,1); // Repetition (~)
-                    septerators += text.Substring(4,1); // Componet (^)
-                    septerators += text.Substring(7,1); // Subcomponent (&)
+                    septerators = text.Substring(3, 1); // Feild (|)
+                    septerators += text.Substring(5, 1); // Repetition (~)
+                    septerators += text.Substring(4, 1); // Componet (^)
+                    septerators += text.Substring(7, 1); // Subcomponent (&)
 
                     escape = text.Substring(6, 1); // \
 
-                    text = text.Substring(0,4) + text.Substring(8);  // remove the delimitors for ease of paring the MSH record
+                    text = text.Substring(0, 4) + text.Substring(8);  // remove the delimitors for ease of paring the MSH record
                 }
                 record.Separators = septerators;
                 record.Escape = escape;
                 record.Text = text;
                 record.RecordType = record.Get("1"); // first field contains the Record Type
 
-                Dictionary<string, string> fields = record.GetItems(); // Extracts all field information from record
+                Dictionary<string, string> items = record.GetItems(); // Extracts all field information from record
 
                 // Translate the record
-                Dictionary<string, string> mapped = AstmRecordMap.RemapRecord(fields, TranslationRecordMap, OnlyMapped);
+                Dictionary<string, string> mapped = AstmRecordMap.RemapRecord(items, translationMap, OnlyMapped);
+
                 mapped["_Type"] = record.RecordType;
                 mapped["_Delimiters"] = standardDelimiters;
-                mapped["_Length"] = record.Count.ToString();
+                mapped["_MsgType"] = msgType;
 
                 mappedMessage.Add(mapped);
-            } 
+            }
 
             return mappedMessage;
         }
+
+
 
         /// <summary>
         /// CreateMessge - creates a message from a list of mapped records
@@ -156,13 +174,25 @@ namespace tgenaux.astm
         /// <param name="delimitors">Delimiters are an ordered list of characters as defined by standard.</param>
         /// <param name="mappedMessage">A mapped message is a list of key-value parirs</param>
         /// <returns>return a message</returns>
-        public List<string> CreateMessge(string seperators, string escape, string delimitors,List<Dictionary<string, string>> mappedMessage)
+        public List<string> CreateMessge(string seperators, string escape, string delimitors, List<Dictionary<string, string>> mappedMessage)
+        {
+            List<string> message = MessageParsing.CreateMessge(seperators, escape, delimitors, mappedMessage, OnlyMapped, TranslationRecordMap);
+
+            return message;
+        }
+
+        public string CreateRecord(string seperators, string escape, string delimitors, AstmRecordMap recordMap)
+        {
+            return MessageParsing.CreateRecord(seperators, escape, delimitors, recordMap, OnlyMapped, TranslationRecordMap);
+        }
+
+        public static List<string> CreateMessge(string seperators, string escape, string delimitors, List<Dictionary<string, string>> mappedMessage, bool onlyMapped, AstmRecordMap transMap)
         {
             List<string> message = new List<string>();
             foreach (var mappedRecord in mappedMessage)
             {
                 AstmRecordMap recMap = new AstmRecordMap() { Map = mappedRecord };
-                string text = CreateRecord(seperators, escape, delimitors, recMap);
+                string text = CreateRecord(seperators, escape, delimitors, recMap, onlyMapped, transMap);
 
                 if (text.Length > 0)
                 {
@@ -172,16 +202,22 @@ namespace tgenaux.astm
 
             return message;
         }
-
-        public string CreateRecord(string seperators, string escape, string delimitors, AstmRecordMap recordMap)
+        public static string CreateRecord(string seperators, string escape, string delimitors, AstmRecordMap recordMap, bool onlyMapped, AstmRecordMap transMap)
         {
             Record record = new Record();
             record.Separators = seperators;
             record.Escape = escape;
             record.Delimiters = delimitors;
-            record.RecordType = recordMap.Map["_Type"];
+            if (recordMap.Map.ContainsKey("_Type"))
+            {
+                record.RecordType = recordMap.Map["_Type"];
+            }
+            else if(recordMap.Map.ContainsKey("RecordType"))
+            {
+                record.RecordType = recordMap.Map["RecordType"];
+            }
 
-            Dictionary<string, string> mapped = AstmRecordMap.RemapRecord(recordMap.Map, TranslationRecordMap, OnlyMapped);
+            Dictionary<string, string> mapped = AstmRecordMap.RemapRecord(recordMap.Map, transMap, onlyMapped);
 
             foreach (var key in mapped.Keys)
             {
@@ -203,6 +239,8 @@ namespace tgenaux.astm
 
             return record.Text;
         }
+
+
 
     }
 }

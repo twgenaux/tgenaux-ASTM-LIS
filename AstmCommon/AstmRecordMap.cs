@@ -70,9 +70,9 @@ namespace tgenaux.astm
         /// <returns>Returns the translated record map</returns>
         public static Dictionary<string, string> RemapRecord
             (
-            Dictionary<string, string> sourceRecordMap, 
-            AstmRecordMap translationMap, 
-            bool onlyMapped=false)
+            Dictionary<string, string> sourceRecordMap,
+            AstmRecordMap translationMap,
+            bool onlyMapped = false)
         {
             Dictionary<string, string> translatedRecordMap = new Dictionary<string, string>();
 
@@ -82,13 +82,29 @@ namespace tgenaux.astm
                 {
                     translatedRecordMap[translationMap.Map[key]] = sourceRecordMap[key];
                 }
-                else if (!onlyMapped)
+                else if ((!onlyMapped) || (key[0] == '_'))
                 {
                     // Copy the unmapped field
                     translatedRecordMap[key] = sourceRecordMap[key];
                 }
             }
             return translatedRecordMap;
+        }
+        public static List<Dictionary<string, string>> RemapRecord
+            (
+            List<Dictionary<string, string>> sourceMessage,
+            AstmRecordMap translationMap,
+            bool onlyMapped = false)
+        {
+            List < Dictionary<string, string> > transMessage = new List<Dictionary<string, string>>();
+
+            foreach (var map in sourceMessage) 
+            {
+                Dictionary<string, string> translated = RemapRecord(map, translationMap, onlyMapped);
+
+                transMessage.Add(translated);
+            }
+            return transMessage;
         }
 
         /// <summary>
