@@ -62,7 +62,7 @@ namespace tgenaux.astm
         {
             if (File.Exists(translationMapPathname)) 
             {
-                TranslationRecordMap = AstmRecordMap.ReadAstmTranslationRecordMap(translationMapPathname);
+                TranslationRecordMap = AstmRecordMap.ReadAstmTranslationRecordMap(new FileInfo(translationMapPathname));
             }
             
             List<string> lines = File.ReadAllLines(pathanme).ToList();

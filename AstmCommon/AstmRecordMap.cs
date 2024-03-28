@@ -108,57 +108,61 @@ namespace tgenaux.astm
         }
 
         /// <summary>
-        /// Read a translation record map
+        /// Reads a translation record map
         /// </summary>
         /// <param name="mapFile">The text based record map file path-name</param>
         /// <returns>Returns a AstmRecordMap with the file contents</returns>
-        public static AstmRecordMap ReadAstmTranslationRecordMap(string mapFile)
+        public static AstmRecordMap ReadAstmTranslationRecordMap(FileInfo mapFile)
         {
             AstmRecordMap map = new AstmRecordMap();
 
-            if (File.Exists(mapFile))
+            if (mapFile.Exists)
             {
-                int lineNumber = 0;
-                string line;
-                try
+                string[] lines = File.ReadAllLines(mapFile.FullName);
+                map = ReadAstmTranslationRecordMap(lines);
+            }
+            return map;
+        }
+
+        /// <summary>
+        /// Reads a translation record map
+        /// </summary>
+        /// <param name="lines">Message nap lines</param>
+        /// <returns></returns>
+        public static AstmRecordMap ReadAstmTranslationRecordMap(string[] lines)
+        {
+            AstmRecordMap map = new AstmRecordMap();
+
+            int lineNumber = 0;
+            foreach (string line in lines)
+            {
+                lineNumber++;
+                string text = line;
+
+                // Remove comment
+                if (text.Contains('#'))
                 {
-                    using (var sr = new StreamReader(mapFile))
-                    {
-                        while (null != (line = sr.ReadLine()))
-                        {
-                            //Console.WriteLine(line);
-                            lineNumber++;
-
-                            // Remove comment
-                            if (line.Contains('#'))
-                            {
-                                line = line.Substring(0, line.IndexOf("#"));
-                            }
-
-                            // Remove leading and trailing whitespace
-                            line = line.Trim();
-
-                            // If not a comment line or a blank line, then parse it
-                            if (line.Length > 0)
-                            {
-                                var parts = line.Split(':');
-                                parts[0].Trim();
-
-                                // Bi-directional map
-                                // Both values are add as key/value
-                                map.Map[parts[0]] = parts[1];
-                                map.Map[parts[1]] = parts[0];
-                            }
-                        }
-                    }
+                    text = text.Substring(0, text.IndexOf("#"));
                 }
-                catch (Exception e)
+
+                // Remove leading and trailing whitespace
+                text = text.Trim();
+
+                // If not a comment line or a blank line, then parse it
+                if (text.Length > 0)
                 {
-                    Console.WriteLine(e.ToString());
+                    var parts = text.Split(':');
+                    parts[0].Trim();
+
+                    // Bi-directional map
+                    // Both values are add as key/value
+                    map.Map[parts[0]] = parts[1];
+                    map.Map[parts[1]] = parts[0];
                 }
             }
             return map;
         }
+
 
         /// <summary>
         /// Read a simple text file record map
