@@ -56,4 +56,4 @@ R.11.1.2:R-OperatorVerisfier
 R.13:R-CompletionTime
 R.14:R-InstrumentID
 
-L.1:L-Terminator
+L.1:L-End-Of-Message
