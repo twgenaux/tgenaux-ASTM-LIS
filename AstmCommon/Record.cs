@@ -114,6 +114,11 @@ namespace tgenaux.astm
         /// <param name="value">The field value</param>
         public void Set(int column, string value)
         {
+            if (column < 1)
+            {
+                throw new ArgumentOutOfRangeException("column");
+            }
+
             while (Fields.Count() < column)
             {
                 Fields.Add("");

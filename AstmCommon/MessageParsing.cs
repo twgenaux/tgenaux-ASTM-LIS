@@ -240,7 +240,19 @@ namespace tgenaux.astm
             return record.Text;
         }
 
+        public static void GetAstmDelimiters(string text, out string delimiters, out string seperators, out string escape)
+        {
+            delimiters = text.Substring(1, 4);
+            seperators = delimiters.Substring(0, 3);
+            escape = delimiters.Substring(3, 1);
+        }
 
+        public static void GetHL7Delimiters(string text, out string delimiters, out string seperators, out string escape)
+        {
+            delimiters = text.Substring(3, 5);
+            seperators = delimiters.Substring(0, 3) + text.Substring(4, 1);
+            escape = delimiters.Substring(3, 1);
+        }
 
     }
 }
