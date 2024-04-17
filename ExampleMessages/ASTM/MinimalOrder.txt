@@ -1,0 +1,6 @@
+# Minimum ASTM Order Message
+
+H|\^&
+P|1
+O|1|SID101||ABO-D|||||||||||CENTBLOOD
+L
