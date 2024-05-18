@@ -12,7 +12,7 @@ I had already seen some code that reads and writes ASTM messages, both on the we
 
 I played around mentally going through different ideas for a while until I realized that an ASTM record is in essence a recursive data structure, one recursion for each separator. ASTM records have 3 separators; Field, Repeat-Field, and Components. Because it only has 3 delimiters, it is limited to only 3 levels of recursion.
 
-[ASTM E1394 Message Parsing](https://github.com/twgenaux/tgenaux-ASTM-LIS/ASTM E1394 Message Parsing.html) 
+[ASTM E1394 Message Parsing|https://github.com/twgenaux/tgenaux-ASTM-LIS/ASTM E1394 Message Parsing.html] 
 
 This project demonstrates generically extracting the contents of ASTM  E1394 messages.
 
