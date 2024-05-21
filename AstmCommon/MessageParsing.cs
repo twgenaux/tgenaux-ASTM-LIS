@@ -111,20 +111,22 @@ namespace tgenaux.astm
                 }
 
                 // ASTM 
-                else if (text.Substring(0, 1) == "H")
+                else if ((text.Length > 0) && (text.Substring(0, 1) == "H"))
                 {
                     msgType = "ASTM";
-                    standardDelimiters = text.Substring(1, 4);
+                    standardDelimiters = GetAstmDelimiters(text);
                     record.Delimiters = standardDelimiters;
+                    // record.Separators = GetAstmSepertors(standardDelimiters);
+                    // record.Escape = GetAstmEscape(standardDelimiters);
 
-                    septerators = text.Substring(1, 3);
-                    escape = text.Substring(4, 1);
+                    septerators = GetAstmSepertors(standardDelimiters);
+                    escape = GetAstmEscape(standardDelimiters);
 
                     text = text.Substring(0, 2) + text.Substring(5);  // remove the delimitors for ease of paring the MSH record
                 }
 
                 // HL7
-                else if (text.Substring(0, 3) == "MSH")  // MSH|^~\&  - Feild (|), Componet (^), Repetition (~), (&) Escape (\), Subcomponent
+                else if ((text.Length > 2) && (text.Substring(0, 3) == "MSH"))  // MSH|^~\&  - Feild (|), Componet (^), Repetition (~), (&) Escape (\), Subcomponent
                 {
                     msgType = "HL7";
                     // TODO: HL7 septerators |^~& Needs to be ordered as Field, Repeat, Composit, Sub-Composit => |~^&
@@ -208,6 +210,7 @@ namespace tgenaux.astm
             record.Separators = seperators;
             record.Escape = escape;
             record.Delimiters = delimitors;
+
             if (recordMap.Map.ContainsKey("_Type"))
             {
                 record.RecordType = recordMap.Map["_Type"];
@@ -243,15 +246,60 @@ namespace tgenaux.astm
         public static void GetAstmDelimiters(string text, out string delimiters, out string seperators, out string escape)
         {
             delimiters = text.Substring(1, 4);
-            seperators = delimiters.Substring(0, 3);
-            escape = delimiters.Substring(3, 1);
+            seperators = GetAstmSepertors(delimiters);
+            escape = GetAstmEscape(delimiters);
+        }
+
+        public static string GetAstmDelimiters(string text)
+        {
+            string delimiters = text.Substring(1, 4);
+            return delimiters;
+        }
+
+        public static string GetAstmSepertors(string delimiters)
+        {
+            string seperators = delimiters.Substring(0, 3);
+            return seperators;
+        }
+
+        public static string GetAstmEscape(string delimiters)
+        {
+            string escape = delimiters.Substring(3, 1);
+            return escape;
         }
 
         public static void GetHL7Delimiters(string text, out string delimiters, out string seperators, out string escape)
         {
             delimiters = text.Substring(3, 5);
-            seperators = delimiters.Substring(0, 3) + text.Substring(4, 1);
-            escape = delimiters.Substring(3, 1);
+            seperators = GetHL7seperators(delimiters);
+            escape = GetHL7Escape(delimiters);
+        }
+
+
+        public static string GetHL7Delimiters(string text)
+        {
+            string delimiters = text.Substring(3, 5);
+            return delimiters;
+        }
+
+        public static string GetHL7seperators(string delimiters)
+        {
+            // Delimiters : |^~\&
+            // Septerators: |^~&
+            // Escape: \
+            // Septerators need to be ordered as Field, Repeat, Composit, Sub-Composit: |~^&
+            // so that they follow the link below:
+            // https://www.qvera.com/kb/index.php/440/please-explain-the-use-of-a-tilde-or-squiggly-in-the-hpath
+            string seperators = delimiters.Substring(0, 3) + delimiters.Substring(4, 1);
+
+            return seperators;
+        }
+
+        public static string GetHL7Escape(string delimiters)
+        {
+            string escape = delimiters.Substring(3, 1);
+
+            return escape;
         }
 
     }
