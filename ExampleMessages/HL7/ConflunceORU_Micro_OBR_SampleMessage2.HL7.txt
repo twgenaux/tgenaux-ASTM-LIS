@@ -12,7 +12,6 @@
 # Defines the delimiters for processing the OBR segment
 MSH|^~\&
 
-# This record has all the delimiters
 OBR|3|2108511585^HNAM_ORDERI||CD:312370^MIC|||20190331102800.0000-0400|||||||20190331111500.0000-0400|88&Tissue|1727^ABC^DEC||||000002019090001260^HNA_ACCN~13473109^HNA_ACCNID||20190405141237.0000-0400||Micro|M|^2^Ent&Enteroco|1^^^^^1
 
 # AstmMessageParsing Output
