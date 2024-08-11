@@ -83,11 +83,65 @@ namespace tgenaux.astm
             }
             else
             {
+                AstmRecordExamle();
+                
                 BriefExample();
 
                 DetailedExample();
             }
         }
+
+        #region AstmRecord Example
+        static void AstmRecordExamle()
+        {
+            Console.WriteLine();
+            Console.WriteLine("AstmRecord Example");
+
+            // Test records
+            string text = "";
+            //text = @"H|\^&|||Phadia.Prime^1.2.0.12371^4.0^^^^|||||^127.0.0.1||P|1|20120522101251";
+            //text = @"H|\^&|||Phadia.Prime^1.2.0.12371^4.0|||||^127.0.0.1||P|1|20120522101251";
+            text = @"O|1|SID102\SID103||Field-&F& Repeat-&R& Componet-&S& Escape-&E&||^^^|\|||^O.11.2|||||PACKEDCELLS\PLASMA|^^^\PHY1001^Brewster^Katherine\PHY1002^McCoy^Leonard^H\^^^";
+            //text = @"R|^^^|1^^^|^^2^|^^^3"; 
+            Console.WriteLine(text);
+            Console.WriteLine();
+
+            Console.WriteLine("Extract all data from Record");
+            AstmRecord astmRecord = new AstmRecord();
+            astmRecord.Text = text;
+            List<string> astmList = astmRecord.GetAll();
+
+            foreach (var item in astmList)
+            {
+                Console.WriteLine($"{item}");
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Extract each data item by its address");
+
+            foreach (var item in astmList)
+            {
+                var parts = item.Split(':');
+                string value = astmRecord.Get(parts[0]);
+
+                Console.WriteLine($"{parts[0]}:{value}");
+            }
+
+
+            // Recreate the record
+            Console.WriteLine();
+            Console.WriteLine("Recreate a record equivalent to the original record");
+
+            AstmRecord astmRecord2 = new AstmRecord();
+
+            foreach (var item in astmList)
+            {
+                var parts = item.Split(':');
+                astmRecord2.Set(parts[0], parts[1]);
+            }
+            Console.WriteLine(astmRecord2.Text);
+        }
+        #endregion
 
         #region Detailed Example
         static void DetailedExample()

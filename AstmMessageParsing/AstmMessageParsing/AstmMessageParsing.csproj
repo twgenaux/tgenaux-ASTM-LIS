@@ -52,6 +52,7 @@
     <Compile Include="..\..\AstmCommon\Record.cs">
       <Link>Record.cs</Link>
     </Compile>
+    <Compile Include="AstmRecord.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
