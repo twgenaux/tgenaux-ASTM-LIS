@@ -28,26 +28,29 @@ using System.Linq;
 namespace tgenaux.astm
 {
     /// <summary>
-    /// The AstmRecord class is a container for storing and parsing a delimited 
-    /// line of text.
+    /// The AstmRecord class is a container for parsing and creating an
+    /// ASTM E1394 and LIS02-A2 record
     /// 
-    /// A record can be partitioned into fields. A mnemonic for a field is 
-    /// constructed from the record ID and the field's numeric position in the
-    /// record. A record holding the demographics of a person could have a 
-    /// record ID of P. If the person's name is stored in position 7, the 
-    /// mnemonic is P-7. If the person's name is further partitioned into
-    /// it's components of last, first, and middle; then the mnemonic for the
-    /// last name is P-7.1.
+    /// An ASTM record is a list of delimited fields. Every record begins with 
+    /// a Record Type ID, like O, for an Order record, which indicates the type
+    /// of data contained in that record.
     /// 
-    /// The address of the last name in P-7 is 7.1.
+    /// Fields can be furtheer partitioned into Repeat Fields and Components.
+    /// 
+    /// For more information ASTM E1394 and LIS02-A2 records, see:
+    /// "Introduction to ASTM E1394 and LIS02-A2 Message Formats"
+    /// https://twgenaux.github.io/MessageFormats/MessageFormats
+    /// 
     /// </summary>
     public class AstmRecord
     {
+        // Delimiter Indexes
         const int FieldDelimiterIndex = 0;
         const int RepeatDelimiterIndex = 1;
         const int ComponentDelimiterIndex = 2;
         const int EscapeDelimiterIndex = 3;
 
+        // Separator Indexes
         const int FieldSeparatorIndex = 0;
         const int RepeatSeparatorIndex = 1;
         const int ComponentSeparatorIndex = 2;
