@@ -23,13 +23,13 @@ P.6.1.3:Patient Middle
 P.7:Mothers Maiden
 P.8:BirthDate
 P.9:Sex
-P.14:Attending
+P.14:Attending Physician
 P.14.1.1:Attending Physician ID
-P.14.1.2:Attending Last Namne
+P.14.1.2:Attending Last Name
 P.14.1.3:Attending First Name
 P.14.1.4:Attending Middle Initial
 P.14.2.1:Attending Physician ID
-P.14.2.2:Attending Last Namne
+P.14.2.2:Attending Last Name
 P.14.2.3:Attending First Name
 P.14.2.4:Attending Middle Initial
 P.15:Patient’s Birth Name
@@ -53,6 +53,16 @@ O.12:Action Code
 O.16:Sample Types
 O.16.1:Sample Type1
 O.16.2:Sample Type2
+O.17:Ordering Physician
+O.17.1.1:Ordering Physician ID
+O.17.1.2:Ordering Last Name
+O.17.1.3:Ordering First Name
+O.17.1.4:Ordering Middle Initial
+O.17.2.1:Ordering Physician ID
+O.17.2.2:Ordering Last Name
+O.17.2.3:Ordering First Name
+O.17.2.4:Ordering Middle Initial
+P.15:Patient’s Birth Name
 O.23:Reported Time
 O.26:Report Type
 
