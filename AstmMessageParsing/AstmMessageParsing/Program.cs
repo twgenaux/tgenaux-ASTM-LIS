@@ -280,6 +280,29 @@ namespace tgenaux.astm
             Console.WriteLine("Translate each item of information (positions and values), into tokens and values.");
             List<Dictionary<string, string>> mappedMessage2 = AstmRecordMap.RemapRecord(mappedMessage, transMap, false);
             DumpMappedMessage(mappedMessage2);
+
+
+            AstmRecord exammple2 = new AstmRecord() { Text = @"O|1|SID101||ABORH|||||||||||CENTBLOOD" };
+            List<string> exammple2Data = exammple2.GetAll();
+            mappedMessage = new List<Dictionary<string, string>> { ConvertToMap(exammple2Data) };
+
+            tables = DumpToMarkdownTable(mappedMessage, MSG_1_Tables_TransMap);
+            File.AppendAllText("MessageFormatsMSG-1_Tables.md", tables);
+
+            AstmRecord exammple3 = new AstmRecord() { Text = @"O|1|SID102\SID103||ABO FWD/RVS|||||||||||PACKEDCELLS\PLASMA" };
+            List<string> exammple3Data = exammple3.GetAll();
+            mappedMessage = new List<Dictionary<string, string>> { ConvertToMap(exammple3Data) };
+
+            tables = DumpToMarkdownTable(mappedMessage, MSG_1_Tables_TransMap);
+            File.AppendAllText("MessageFormatsMSG-1_Tables.md", tables);
+
+            AstmRecord exammple4 = new AstmRecord() { Text = @"O|1|SID101||ABORH|||||||||||CENTBLOOD|PHY1001^Brewster^Katherine\PHY1002^McCoy^Leonard^H" };
+            List<string> exammple4Data = exammple4.GetAll();
+            mappedMessage = new List<Dictionary<string, string>> { ConvertToMap(exammple4Data) };
+
+            tables = DumpToMarkdownTable(mappedMessage, MSG_1_Tables_TransMap);
+            File.AppendAllText("MessageFormatsMSG-1_Tables.md", tables);
+
             Console.WriteLine();
             Console.WriteLine();
         }
