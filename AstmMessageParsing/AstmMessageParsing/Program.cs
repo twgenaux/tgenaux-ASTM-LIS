@@ -84,6 +84,7 @@ namespace tgenaux.astm
             }
             else
             {
+                MessageFormats1();
                 AstmRecordExamle2();
                 AstmRecordExamle1();
 
@@ -107,6 +108,51 @@ namespace tgenaux.astm
             }
             return mapped;
         }
+
+        static string DumpToMarkdownTable(List<Dictionary<string, string>> sourceRecordMap, AstmRecordMap translationMap)
+        {
+            List<string> output = new List<string>();
+
+            foreach (var recordMap in sourceRecordMap)
+            {
+                // Heading
+                string text;
+                output.Add("");
+                text = $"| Position | Data Type | Value |";
+                output.Add(text);
+                text = $"| -------- | ------------------- | --------- |";
+                output.Add(text);
+
+                foreach (var key in recordMap.Keys)
+                {
+                    if (translationMap.Map.ContainsKey(key))
+                    {
+                        //    | Position |      Data Type            | Value |
+                        text = $"| {key} | {translationMap.Map[key]} | {recordMap[key]} |";
+                        output.Add(text);
+                    }
+                    else
+                    {
+                        //       | Position |      Data Type            | Value |
+                        text = $"| {key}  |   | {recordMap[key]} |";
+                        output.Add(text);
+                    }
+                }
+                output.Add("");
+                output.Add("");
+                output.Add("");
+            }
+
+            foreach (var line in output)
+            {
+                Console.WriteLine(line);
+            }
+
+            string report = string.Join("\n", output);
+
+            return report;
+        }
+
         static void AstmRecordExamle2()
         {
             Console.WriteLine();
@@ -180,6 +226,60 @@ namespace tgenaux.astm
             {
                 Console.WriteLine(line);
             }
+            Console.WriteLine();
+            Console.WriteLine();
+        }
+
+
+        static void MessageFormats1()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Introduction to ASTM E1394 and LIS02-A2 Message Formats - Example 1");
+
+            string[] msg = File.ReadAllLines("MessageFormatsMSG-1.txt");
+            List<string> message = msg.ToList();
+
+            Console.WriteLine("Extract each item of information from the meassage (position and value).");
+
+            List<Dictionary<string, string>> mappedMessage = new List<Dictionary<string, string>>();
+
+            foreach (var line in message)
+            {
+                Console.WriteLine(line);
+
+                // Skip empty or comment lines (#)
+                // Comment lines must start with #
+                // End of line comments are not supported
+                if (string.IsNullOrEmpty(line) || line.Trim().StartsWith("#"))
+                {
+                    continue;
+                }
+
+                AstmRecord record = new AstmRecord();
+                record.Text = line;
+                List<string> data = record.GetAll();
+
+                Dictionary<string, string> mapped = ConvertToMap(data);
+                mappedMessage.Add(mapped);
+            }
+
+            Console.WriteLine();
+            DumpMappedMessage(mappedMessage);
+            Console.WriteLine();
+
+
+            ////// Load the bi-directional translation map
+            AstmRecordMap MSG_1_Tables_TransMap = AstmRecordMap.ReadAstmTranslationRecordMap(new FileInfo("MessageFormatsMSG-1_Tables_TransMap.txt"));
+
+            AstmRecordMap transMap = AstmRecordMap.ReadAstmTranslationRecordMap(new FileInfo("Vision.TransMap.txt"));
+
+            string tables = DumpToMarkdownTable(mappedMessage, MSG_1_Tables_TransMap);
+
+            File.WriteAllText("MessageFormatsMSG-1_Tables.md", tables);
+
+            Console.WriteLine("Translate each item of information (positions and values), into tokens and values.");
+            List<Dictionary<string, string>> mappedMessage2 = AstmRecordMap.RemapRecord(mappedMessage, transMap, false);
+            DumpMappedMessage(mappedMessage2);
             Console.WriteLine();
             Console.WriteLine();
         }

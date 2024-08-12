@@ -1,0 +1,73 @@
+H.1:Record Type ID
+H.5:Sender Name
+H.5.1.1:Company
+H.5.1.2:Instrument Model
+H.5.1.3:Version
+H.5.1.4:Instrument ID
+H.12:Processing ID
+H.13:Version Number
+H.14:Timestamp
+
+P.1:Record Type ID
+P.2:Sequence Number
+P.3:Patient ID
+P.4:Patient ID Lab
+P.5:Patient ID3
+P.5.1.1:National ID
+P.5.1.2:Medical Record ID
+P.5.1.3:Other ID
+P.6:Patient Name
+P.6.1.1:Patient Last
+P.6.1.2:Patient First
+P.6.1.3:Patient Middle
+P.7:Mothers Maiden
+P.8:BirthDate
+P.9:Sex
+P.14:Attending
+P.14.1.1:Attending Physician ID
+P.14.1.2:Attending Last Namne
+P.14.1.3:Attending First Name
+P.14.1.4:Attending Middle Initial
+P.14.2.1:Attending Physician ID
+P.14.2.2:Attending Last Namne
+P.14.2.3:Attending First Name
+P.14.2.4:Attending Middle Initial
+P.15:Patient’s Birth Name
+
+O.1:Record Type ID
+O.2:Sequence Number
+O.3:Sample IDs
+O.3.1:Sample ID1
+O.3.2:SampleI D2
+O.5:Profiles
+O.5.1:Profile1
+O.5.2:Profile2
+O.5.3:Profile3
+O.5.4:Profile4
+O.5.5:Profile5
+O.5.6:Profile6
+O.5.7:Profile7
+O.6:Priority
+O.7:Requested TimeStamp
+O.12:Action Code
+O.16:Sample Types
+O.16.1:Sample Type1
+O.16.2:Sample Type2
+O.23:Reported Time
+O.26:Report Type
+
+R.1:Record Type ID
+R.2:Sequence Number
+R.3:Analysis ID
+R.4:Analysis Value
+R.7:Abnormal Flags
+R.9:Status
+R.11:Operator
+R.11.1.1:Operator Instrument
+R.11.1.2:Operator Verifier
+R.13:Completion Time
+R.14:Instrument ID
+
+L.1:Record Type ID
+L.2:Sequence Number
+L.3:Termination Code
