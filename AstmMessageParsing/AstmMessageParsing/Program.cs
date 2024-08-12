@@ -26,6 +26,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Linq;
+using System.Net;
 
 namespace tgenaux.astm
 {
@@ -83,8 +84,9 @@ namespace tgenaux.astm
             }
             else
             {
-                AstmRecordExamle();
-                
+                AstmRecordExamle2();
+                AstmRecordExamle1();
+
                 BriefExample();
 
                 DetailedExample();
@@ -92,7 +94,98 @@ namespace tgenaux.astm
         }
 
         #region AstmRecord Example
-        static void AstmRecordExamle()
+
+        static Dictionary<string, string> ConvertToMap(List<string> recordData)
+        {
+            Dictionary<string, string> mapped = new Dictionary<string, string>();
+
+            foreach (var item in recordData)
+            {
+                var parts = item.Split(':');
+                mapped[parts[0]] = parts[1];
+
+            }
+            return mapped;
+        }
+        static void AstmRecordExamle2()
+        {
+            Console.WriteLine();
+            Console.WriteLine("AstmRecord Example 2");
+
+            string[] msg = File.ReadAllLines("Vision.txt");
+            List<string> message = msg.ToList();
+
+            Console.WriteLine("Extract each item of information from the meassage (position and value).");
+
+            List<Dictionary<string, string>> mappedMessage = new List<Dictionary<string, string>>();
+
+            foreach (var line in message)
+            {
+                Console.WriteLine(line);
+
+                // Skip empty or comment lines (#)
+                // Comment lines must start with #
+                // End of line comments are not supported
+                if (string.IsNullOrEmpty(line) || line.Trim().StartsWith("#"))
+                {
+                    continue;
+                }
+
+                AstmRecord record = new AstmRecord();
+                record.Text = line; ;
+                List<string> data = record.GetAll();
+
+                Dictionary<string, string> mapped = ConvertToMap(data);
+                mappedMessage.Add(mapped);
+            }
+
+            Console.WriteLine();
+            //DumpMappedMessage(mappedMessage);
+            Console.WriteLine();
+
+
+            ////// Load the bi-directional translation map
+            AstmRecordMap transMap = AstmRecordMap.ReadAstmTranslationRecordMap(new FileInfo("Vision.TransMap.txt"));
+
+            Console.WriteLine("Translate each item of information (positions and values), into tokens and values.");
+            List<Dictionary<string, string>> mappedMessage2 = AstmRecordMap.RemapRecord(mappedMessage, transMap, true);
+            //DumpMappedMessage(mappedMessage2);
+            Console.WriteLine();
+
+            Console.WriteLine("Translate each item of information (tokens and values), into positions and values.");
+
+            ////// Translate the message, replacing the token of each value 
+            ////// with the location of the value in each record (O.16:CENTBLOOD).
+            List<Dictionary<string, string>> mappedMessage3 = AstmRecordMap.RemapRecord(mappedMessage2, transMap, true);
+            //DumpMappedMessage(mappedMessage3);
+            Console.WriteLine();
+
+            Console.WriteLine("Recreate a record an equivalent to the original record with the positions and values.");
+            List<string> newMessage = new List<string>();
+
+            foreach (var mappedRecord in mappedMessage3)
+            {
+                AstmRecord newRecord = new AstmRecord();
+
+                foreach (var key in mappedRecord.Keys)
+                {
+                    newRecord.Set(key, mappedRecord[key]);
+                }
+
+                newRecord.SetDelimitersInHRecord();
+                newMessage.Add(newRecord.Text);
+            }
+
+            foreach (var line in newMessage)
+            {
+                Console.WriteLine(line);
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+        }
+
+
+        static void AstmRecordExamle1()
         {
             Console.WriteLine();
             Console.WriteLine("AstmRecord Example");

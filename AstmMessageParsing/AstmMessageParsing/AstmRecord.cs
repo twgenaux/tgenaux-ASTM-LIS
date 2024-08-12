@@ -146,6 +146,14 @@ namespace tgenaux.astm
             return delimiters;
         }
 
+        public void SetDelimitersInHRecord()
+        {
+            if (RecordType == "H")
+            {
+                Set(2, Delimiters.Substring(1,3));
+            }
+        }
+
 
         /// <summary>
         /// Converts the Fields to a delimited line of text
