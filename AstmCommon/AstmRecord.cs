@@ -224,8 +224,15 @@ namespace tgenaux.astm
                 address.RemoveAt(0);
             }
 
+            string escaped = value.Replace(Escape, $"{Escape}E{Escape}");
+            escaped = escaped.Replace(Separators[FieldDelimiterIndex].ToString(), $"{Escape}F{Escape}");
+            escaped = escaped.Replace(Separators[RepeatDelimiterIndex].ToString(), $"{Escape}R{Escape}");
+            escaped = escaped.Replace(Separators[ComponentDelimiterIndex].ToString(), $"{Escape}S{Escape}");
+
+
+
             int level = -1;
-            Set(level, this.Separators, address, value);
+            Set(level, this.Separators, address, escaped);
         }
 
         /// <summary>
@@ -242,18 +249,13 @@ namespace tgenaux.astm
             int column = Convert.ToInt16(address[level]);
             if (level + 1 == address.Count())
             {
-                // Replace escape sequence for this separator.
-                string escaped = value.Replace(Escape, $"{Escape}E{Escape}");
-                escaped = escaped.Replace(Separators[FieldDelimiterIndex].ToString(), $"{Escape}F{Escape}");
-                escaped = escaped.Replace(Separators[RepeatDelimiterIndex].ToString(), $"{Escape}R{Escape}");
-                escaped = escaped.Replace(Separators[ComponentDelimiterIndex].ToString(), $"{Escape}S{Escape}");
-
-                this.Set(column, escaped);
+                this.Set(column, value);
             }
             else
             {
                 AstmRecord record = new AstmRecord();
                 string trimmedSeps = separators.Substring(1);
+                record.Separators = trimmedSeps;
                 record.Text = this.Get(column);
                 record.Set(level, trimmedSeps, address, value);
                 this.Set(column, record.Text);

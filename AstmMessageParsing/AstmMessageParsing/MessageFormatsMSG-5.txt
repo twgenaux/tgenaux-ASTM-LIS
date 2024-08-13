@@ -1,0 +1,4 @@
+O|1|SID304||Type &F& Screen|||||||N||||CENTBLOOD
+O|2|SID304||Type &R& Screen|||||||N||||CENTBLOOD
+O|3|SID304||Type &S& Screen|||||||N||||CENTBLOOD
+O|4|SID304||Type &E& Screen|||||||N||||CENTBLOOD

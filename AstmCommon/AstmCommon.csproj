@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AstmRecord.cs" />
     <Compile Include="AstmRecordMap.cs" />
     <Compile Include="MessageParsing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

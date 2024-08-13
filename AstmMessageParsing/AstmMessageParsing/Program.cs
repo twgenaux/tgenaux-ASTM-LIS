@@ -303,6 +303,40 @@ namespace tgenaux.astm
             tables = DumpToMarkdownTable(mappedMessage, MSG_1_Tables_TransMap);
             File.AppendAllText("MessageFormatsMSG-1_Tables.md", tables);
 
+
+            string[] msg5 = File.ReadAllLines("MessageFormatsMSG-5.txt");
+            List<string> message5 = msg5.ToList();
+
+            List<Dictionary<string, string>> mappedMessage5 = new List<Dictionary<string, string>>();
+
+            foreach (var line in message5)
+            {
+                Console.WriteLine(line);
+
+                // Skip empty or comment lines (#)
+                // Comment lines must start with #
+                // End of line comments are not supported
+                if (string.IsNullOrEmpty(line) || line.Trim().StartsWith("#"))
+                {
+                    continue;
+                }
+
+                AstmRecord record = new AstmRecord();
+                record.Text = line;
+                List<string> data = record.GetAll();
+
+                Dictionary<string, string> mapped = ConvertToMap(data);
+                mappedMessage5.Add(mapped);
+            }
+
+            Console.WriteLine();
+            DumpMappedMessage(mappedMessage5);
+            Console.WriteLine();
+
+
+            tables = DumpToMarkdownTable(mappedMessage5, MSG_1_Tables_TransMap);
+            File.AppendAllText("MessageFormatsMSG-1_Tables.md", tables);
+
             Console.WriteLine();
             Console.WriteLine();
         }
@@ -317,7 +351,8 @@ namespace tgenaux.astm
             string text = "";
             //text = @"H|\^&|||Phadia.Prime^1.2.0.12371^4.0^^^^|||||^127.0.0.1||P|1|20120522101251";
             //text = @"H|\^&|||Phadia.Prime^1.2.0.12371^4.0|||||^127.0.0.1||P|1|20120522101251";
-            text = @"O|1|SID102\SID103||Field-&F& Repeat-&R& Componet-&S& Escape-&E&||^^^|\|||^O.11.2|||||PACKEDCELLS\PLASMA|^^^\PHY1001^Brewster^Katherine\PHY1002^McCoy^Leonard^H\^^^";
+            //text = @"O|1|SID102\SID103||Field-&F& Repeat-&R& Componet-&S& Escape-&E&||^^^|\|||^O.11.2|||||PACKEDCELLS\PLASMA|^^^\PHY1001^Brewster^Katherine\PHY1002^McCoy^Leonard^H\^^^";
+            text = @"O|1|SID102\SID103||Type &E& Screen||^^^|\|||^O.11.2|||||PACKEDCELLS\PLASMA|^^^\PHY1001^Brewster^Katherine\PHY1002^McCoy^Leonard^H\^^^";
             //text = @"R|^^^|1^^^|^^2^|^^^3"; 
             Console.WriteLine(text);
             Console.WriteLine();

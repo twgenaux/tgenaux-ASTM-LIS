@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8C7BD5B1-38DF-4087-BF76-C0C4BB330A0E}</ProjectGuid>
+    <ProjectGuid>{33E03551-3989-4B0D-A006-BB26955CC2CF}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>tgenaux.astm</RootNamespace>
-    <AssemblyName>AstmMessageParsing</AssemblyName>
+    <RootNamespace>AstmRecord_Basic_Example_1</RootNamespace>
+    <AssemblyName>AstmRecord Basic Example 1</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AstmCommon">
+      <HintPath>..\AstmCommon\bin\Debug\AstmCommon.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,51 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\AstmCommon\AstmRecord.cs">
-      <Link>AstmRecord.cs</Link>
-    </Compile>
-    <Compile Include="..\..\AstmCommon\AstmRecordMap.cs">
-      <Link>AstmRecordMap.cs</Link>
-    </Compile>
-    <Compile Include="..\..\AstmCommon\MessageParsing.cs">
-      <Link>MessageParsing.cs</Link>
-    </Compile>
-    <Compile Include="..\..\AstmCommon\Record.cs">
-      <Link>Record.cs</Link>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="TranslationMap.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Vision.TransMap.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Vision.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="MessageFormatsMSG-1.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="MessageFormatsMSG-1_Tables_TransMap.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="MessageFormatsMSG-5.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
