@@ -28,7 +28,10 @@ using System.Linq;
 namespace tgenaux.astm
 {
     /// <summary>
-    /// The AstmRecord class is a container for parsing and creating an
+    /// 
+    /// *********** Rewrite for HL7***************
+    /// 
+    /// The HL7-v2.xRecord class is a container for parsing and creating an
     /// ASTM E1394 and LIS02-A2 record
     /// 
     /// An ASTM record is a list of delimited fields. Every record begins with 
@@ -42,7 +45,7 @@ namespace tgenaux.astm
     /// https://twgenaux.github.io/MessageFormats/MessageFormats
     /// 
     /// </summary>
-    public class AstmRecord
+    public class HL7-v2.xRecord
     {
         // Delimiter Indexes
         const int FieldDelimiterIndex = 0;
@@ -99,7 +102,7 @@ namespace tgenaux.astm
 
         bool SupressTopLevel { get; set; } = true;
 
-        public AstmRecord()
+        public HL7-v2.xRecord()
         {
             
         }
@@ -110,13 +113,16 @@ namespace tgenaux.astm
         /// <param name="text">The delimited line of text</param>
         private void ParseFields(string text)
         {
-            string[] fields = text.Split(Separators[FieldSeparatorIndex]);
-            Fields = fields.ToList();
-
-            if (RecordType == "H")
+            if ((text.Length > 0) && (text[0] == 'H'))
             {
                 Delimiters = GetAstmDelimiters(text);
-                if ( Delimiters.Length > 1 ) 
+
+                string[] fields = text.Split(Separators[FieldSeparatorIndex]);
+                Fields = fields.ToList();
+
+                // Clear H.2 to prevent issues with parsing
+                // SetDelimitersInHRecord can be called later to refill when reading the H-record
+                if ( Delimiters.Length > 0 ) 
                 {
                     Fields[1] = "";
                 }
@@ -253,10 +259,11 @@ namespace tgenaux.astm
             }
             else
             {
-                AstmRecord record = new AstmRecord();
+                HL7-v2.xRecord record = new HL7-v2.xRecord();
                 string trimmedSeps = separators.Substring(1);
                 record.Separators = trimmedSeps;
-                record.Text = this.Get(column);
+                string columnValue = this.Get(column);
+                record.Text = columnValue;
                 record.Set(level, trimmedSeps, address, value);
                 this.Set(column, record.Text);
             }

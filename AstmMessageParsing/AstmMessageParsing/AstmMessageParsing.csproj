@@ -43,20 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\AstmCommon\AstmRecord.cs">
+    <Compile Include="..\..\AstmCommon\AstmCommon\AstmRecord.cs">
       <Link>AstmRecord.cs</Link>
     </Compile>
-    <Compile Include="..\..\AstmCommon\AstmRecordMap.cs">
+    <Compile Include="..\..\AstmCommon\AstmCommon\AstmRecordMap.cs">
       <Link>AstmRecordMap.cs</Link>
     </Compile>
-    <Compile Include="..\..\AstmCommon\MessageParsing.cs">
-      <Link>MessageParsing.cs</Link>
-    </Compile>
-    <Compile Include="..\..\AstmCommon\Record.cs">
-      <Link>Record.cs</Link>
-    </Compile>
+    <Compile Include="MessageParsing.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Record.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

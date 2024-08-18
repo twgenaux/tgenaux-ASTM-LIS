@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstmCommon", "AstmCommon.csproj", "{037746D5-1D76-4124-8D5B-75CAEC4C94BB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstmCommon", ".\AstmCommon\AstmCommon.csproj", "{037746D5-1D76-4124-8D5B-75CAEC4C94BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstmRecord Basic Example 1", "..\AstmRecord Basic Example 1\AstmRecord Basic Example 1.csproj", "{33E03551-3989-4B0D-A006-BB26955CC2CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstmRecord Basic Example 1", ".\AstmRecord Basic Example 1\AstmRecord Basic Example 1.csproj", "{33E03551-3989-4B0D-A006-BB26955CC2CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

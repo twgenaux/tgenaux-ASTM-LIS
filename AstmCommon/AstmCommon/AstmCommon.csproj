@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="AstmRecord.cs" />
     <Compile Include="AstmRecordMap.cs" />
-    <Compile Include="MessageParsing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Record.cs" />
   </ItemGroup>
