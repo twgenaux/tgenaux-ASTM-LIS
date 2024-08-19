@@ -46,9 +46,7 @@
     <Compile Include="..\..\AstmCommon\AstmCommon\AstmRecord.cs">
       <Link>AstmRecord.cs</Link>
     </Compile>
-    <Compile Include="..\..\AstmCommon\AstmCommon\AstmRecordMap.cs">
-      <Link>AstmRecordMap.cs</Link>
-    </Compile>
+    <Compile Include="AstmRecordMap.cs" />
     <Compile Include="MessageParsing.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

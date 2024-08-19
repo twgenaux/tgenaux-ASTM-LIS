@@ -20,6 +20,85 @@ namespace AstmRecord_Basic_Example_1
             AstmObfuscateMessage();
         }
 
+        static void DumpMessageContentToMarkdownTable(List<List<KeyValuePair<string, string>>> messageContent)
+        {
+            List<List<string>> meassageTables = new List<List<string>>();
+
+            foreach (var record in messageContent)
+            {
+                List<string> recordTable = new List<string>();
+
+                // Heading
+                recordTable.Add($"| Position | Value |");
+                recordTable.Add($"| -------- | --------- |");
+
+                foreach (var kvp in record)
+                {
+                    //       | Position |      Data Type            | Value |
+                    recordTable.Add($"| {kvp.Key}  | {kvp.Value} |");
+                }
+                meassageTables.Add(recordTable);
+            }
+
+            foreach (var table in meassageTables)
+            {
+                var newTable = BeautifyMarkdownTable(table);
+                Console.WriteLine(newTable);
+            }
+
+            Console.WriteLine();
+
+        }
+
+        public static string BeautifyMarkdownTable(List<string> table)
+        {
+            // Find the maximum length of each column
+            string[] temp = table[0].Trim(new char[] { '|' }).Split('|');
+            var columnCounts = table[0].Select(row => table[0].Split('|').Length - 1).ToArray();
+            var maxColumnLengths = new int[columnCounts.Max()];
+
+            for (int i = 1; i < table.Count; i++)
+            {
+                var row = table[i].Trim(new char[] { '|' });
+
+                var columns = row.Split('|');
+                for (int j = 0; j < columns.Length; j++)
+                {
+                    var value = columns[j];
+
+                    // Skip | ---- | 
+                    if (value.Trim().Trim(new char[] { '-' }).Length == 0)
+                    {
+                        continue;
+                    }
+                    maxColumnLengths[j - 1] = Math.Max(maxColumnLengths[j - 1], value.Trim().Length);
+                }
+            }
+
+            // Rebuild the table with consistent spacing
+            var builder = new StringBuilder();
+            foreach (var row in table)
+            {
+                var columns = row.Split('|');
+                for (int i = 0; i < columns.Length; i++)
+                {
+                    var column = columns[i].Trim();
+                    if (i > 0)
+                    {
+                        builder.Append("|");
+                    }
+
+                    builder.Append(' ', Math.Max(0, maxColumnLengths[i - 1] - column.Length));
+                    builder.Append(column);
+                    builder.Append(' ', Math.Max(0, maxColumnLengths[i - 1] - column.Length));
+                }
+            }
+
+            return builder.ToString();
+
+        }
+
+
         #region AstmRecordCreateOrderMessage
 
         #region AstmRecordCreateOrderMessageContent
@@ -309,6 +388,8 @@ namespace AstmRecord_Basic_Example_1
                 messageContent.Add(content);
             }
             Console.WriteLine();
+
+            DumpMessageContentToMarkdownTable(messageContent);
 
             foreach (var record in messageContent)
             {
