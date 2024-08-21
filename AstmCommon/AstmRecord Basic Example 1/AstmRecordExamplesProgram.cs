@@ -445,7 +445,8 @@ namespace AstmRecord_Basic_Example_1
         static void AstmMappingMessage()
         {
             Console.WriteLine();
-            Console.WriteLine("Astm Mapping Message");
+            Console.WriteLine("Extracting Astm Record Contnet");
+            Console.WriteLine();
 
             // Source Message
             string[] sourceMessage =
@@ -463,19 +464,47 @@ namespace AstmRecord_Basic_Example_1
             AstmRecord astmRecord = new AstmRecord();
             astmRecord.Text = sourceMessage[1]; // P[1]
 
-            Console.WriteLine("Extract each item of information from the meassage (position and value).");
+            Console.WriteLine("1. Extract all content from the record as Position/Value pairs.");
+            Console.WriteLine(astmRecord.Text);
+            Console.WriteLine();
+
             var recordContent = astmRecord.GetAll();
             var table = AstmRecordUtilitiescs.RecordContentToMarkdownTable(recordContent);
             Console.WriteLine(string.Join("\n", table));
 
-            Console.WriteLine("Translate each item of information (positions and values), into tokens and values..");
+            Console.WriteLine("2.Translate all content from Position/Value to Token/Value pairs as shown in this table");
             AstmRecordMap transMap = AstmRecordMap.ReadAstmTranslationRecordMap(new FileInfo("Vision.TransMap.txt"));
+
             var recordTable = AstmRecordUtilitiescs.MappedRecordToMarkdown(recordContent, transMap);
             Console.WriteLine(string.Join ("\n", recordTable));
+            Console.WriteLine();
 
-            //List<Dictionary<string, string>> mappedMessage2 = AstmRecordMap.RemapRecord(mappedMessage, transMap, true);
+            Console.WriteLine("3. After translating, we have all the original content as Token/Value pairs");
+            List<KeyValuePair<string, string>> mappedContent = AstmRecordMap.RemapRecordContent(recordContent, transMap);
+            recordTable = AstmRecordUtilitiescs.RecordContentToMarkdownTable(mappedContent);
+            Console.WriteLine(string.Join("\n", recordTable));
+            Console.WriteLine();
+
+            //  Extract all message content from each record as Position/Value pairs
+            List<List<KeyValuePair<string, string>>> messageContent = new List<List<KeyValuePair<string, string>>>();
+            messageContent = ParseAstmMessage.ExtractMessageContent(sourceMessage.ToList());
+            var messageTables = AstmRecordUtilitiescs.MessageContentToMarkdownTable(messageContent);
+
+            // Translate all message content from Position/Value to Token/Value pairs
+            messageContent = AstmRecordMap.RemapMessageContent(messageContent, transMap);
+
+            messageTables = AstmRecordUtilitiescs.MessageContentToMarkdownTable(messageContent);
+
+            // Translate all message content from Token/Value to Position/Value pairs
+            messageContent = AstmRecordMap.RemapMessageContent(messageContent, transMap);
+
+            messageTables = AstmRecordUtilitiescs.MessageContentToMarkdownTable(messageContent);
+
+            // Create ASTM message from message content Position/Value pairs
+            // Create method to do this
 
             Console.WriteLine();
+
         }
     }
 }

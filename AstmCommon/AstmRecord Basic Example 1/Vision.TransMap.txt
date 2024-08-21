@@ -25,10 +25,10 @@ P.14.1.1:P-Attending-ID
 P.14.1.2:P-Attending-Last
 P.14.1.3:P-Attending-First
 P.14.1.4:P-Attending-MI
-P.14.2.1:P-Attending-ID
-P.14.2.2:P-Attending-Last
-P.14.2.3:P-Attending-First
-P.14.2.4:P-Attending-MI
+P.14.2.1:P-Attending2-ID
+P.14.2.2:P-Attending2-Last
+P.14.2.3:P-Attending2-First
+P.14.2.4:P-Attending2-MI
 
 O.1:O-RecordType
 O.2:O-SeqNumber

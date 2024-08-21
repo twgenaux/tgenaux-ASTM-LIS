@@ -109,7 +109,7 @@ namespace tgenaux.astm
 
             // Heading
             string position = "Position";
-            string dataType = "Data Type";
+            string dataType = "Token";
             string value = "Value";
 
             maxColumnWidths[0] = Math.Max(maxColumnWidths[0], position.Length);

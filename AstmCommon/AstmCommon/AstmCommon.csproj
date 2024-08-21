@@ -44,6 +44,7 @@
     <Compile Include="AstmRecord.cs" />
     <Compile Include="AstmRecordMap.cs" />
     <Compile Include="AstmRecordUtilitiescs.cs" />
+    <Compile Include="ParseAstmMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Record.cs" />
   </ItemGroup>

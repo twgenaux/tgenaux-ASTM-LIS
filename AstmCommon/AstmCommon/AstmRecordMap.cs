@@ -62,45 +62,47 @@ namespace tgenaux.astm
         }
 
         /// <summary>
-        /// RemapRecord 
+        /// RemapMessageContent 
         /// </summary>
-        /// <param name="sourceRecordMap">The source record map</param>
+        /// <param name="sourceRecordItems">The source record map</param>
         /// <param name="translationMap">The map used to translate the source</param>
         /// <param name="onlyMapped">When true, filters out non-mapped fields, otherwise unmapped fields are included in the optput.</param>
         /// <returns>Returns the translated record map</returns>
-        public static Dictionary<string, string> RemapRecord
+        public static List<KeyValuePair<string, string>> RemapRecordContent
             (
-            Dictionary<string, string> sourceRecordMap,
+            List<KeyValuePair<string, string>> sourceRecordItems,
             AstmRecordMap translationMap,
             bool onlyMapped = false)
         {
-            Dictionary<string, string> translatedRecordMap = new Dictionary<string, string>();
+            List<KeyValuePair<string, string>> translatedRecordMap = new List<KeyValuePair<string, string>> ();
 
-            foreach (var key in sourceRecordMap.Keys)
+            foreach (var kvp in sourceRecordItems)
             {
-                if (translationMap.Map.ContainsKey(key))
+                if (translationMap.Map.ContainsKey(kvp.Key))
                 {
-                    translatedRecordMap[translationMap.Map[key]] = sourceRecordMap[key];
+                    // Translate
+                    KeyValuePair<string, string> map = new KeyValuePair<string, string>(translationMap.Map[kvp.Key], kvp.Value);
+                    translatedRecordMap.Add(map);
                 }
-                else if ((!onlyMapped) || (key[0] == '_'))
+                else if (!onlyMapped)
                 {
                     // Copy the unmapped field
-                    translatedRecordMap[key] = sourceRecordMap[key];
+                    translatedRecordMap.Add(kvp);
                 }
             }
             return translatedRecordMap;
         }
-        public static List<Dictionary<string, string>> RemapRecord
+        public static List<List<KeyValuePair<string, string>>> RemapMessageContent
             (
-            List<Dictionary<string, string>> sourceMessage,
+            List<List<KeyValuePair<string, string>>> sourceMessage,
             AstmRecordMap translationMap,
             bool onlyMapped = false)
         {
-            List < Dictionary<string, string> > transMessage = new List<Dictionary<string, string>>();
+            List<List<KeyValuePair<string, string>>> transMessage = new List<List<KeyValuePair<string, string>>> ();
 
             foreach (var map in sourceMessage) 
             {
-                Dictionary<string, string> translated = RemapRecord(map, translationMap, onlyMapped);
+                var translated = RemapRecordContent(map, translationMap, onlyMapped);
 
                 transMessage.Add(translated);
             }
