@@ -1,0 +1,87 @@
+# Example Translation Map
+# Translation Maps can be used to extract information, populate, and filter records.
+#
+# To generate a list of field address:value pairs, you parse a message without a translation map.
+#
+# You can edit the generated address:value pairs and replace every address with your desired token.
+#
+# To automatically genereate a tranlation map, you can parse a record with 
+# each field containg the tags you want.
+# 
+# Parsing the following Record without a translation map:
+# P|1|PatPracticePatientID|PatLabPatientID|PatPID3|PatFullName
+#
+# Produces the following translation map:
+# P.1:P
+# P.2:1
+# P.3:PatPracticePatientID
+# P.4:PatLabPatientID
+# P.5:PatPID3
+# P.6:PatFullName
+# 
+# You can then replace any feilds with new tags to get something like this:
+# P.1:RecordType
+# P.2:SeqeNumber
+# P.3:PatPracticePatientID
+# P.4:PatLabPatientID
+# P.5:PatPID3
+# P.6:PatFullName
+
+
+# Record Types
+RecordType:H.1 # Message Header
+RecordType:P.1 # Patitent
+RecordType:O.1 # Test Order
+RecordType:R.1 # Resulut
+RecordType:C.1 # Comment
+RecordType:Q.1 # Reqeust Information (Query)
+RecordType:S.1 # Scientific
+RecordType:L.1 # Message Terminator
+RecordType:M.1 # Manucfature Information
+
+# Sequence Number
+SeqeNumber:H.2 # Message Header
+SeqeNumber:P.2 # Patitent
+SeqeNumber:O.2 # Order
+SeqeNumber:R.2 # Resulut
+SeqeNumber:C.2 # Comment
+SeqeNumber:Q.2 # Reqeust Information (Query)
+SeqeNumber:S.2 # Scientific
+SeqeNumber:L.2 # Message Terminator
+SeqeNumber:M.2 # Manucfature Information
+
+# ASTM Patient Record Map
+PatPracticePatientID:P.3
+PatLabPatientID:P.4
+PatPID3:P.5
+PatNatPID3:P.5.1.1
+PatMedPID3:P.5.1.2
+PatOtherPID3:P.5.1.3
+PatFullName:P.6
+PatLastName:P.6.1.1
+PatFirstName:P.6.1.2
+PatMidInital:P.6.1.3
+PatMidSuffix:P.6.1.4
+PatMidTitle:P.6.1.5
+PatMothersMaiden:P.7
+PatBirthDate:P.8
+PatSex:P.9
+PatReservedField:P.12
+PatAttendPhy:P.14
+PatPhyID:P.14.1.1
+PatPhyLastName:P.14.1.2
+PatPhyFirstName:P.14.1.3
+PatPhyMidInital:P.14.1.4
+PatBirthSurname:P.15
+
+# ASTM Order Record Map
+OrderSampleIDs:O.3
+OrderSampleID1:O.3.1
+OrderSampleID2:O.3.2
+OrderTestID:O.5    # Universal Test ID
+OrderPriority:O.6
+OrderReqDateTime:O.7
+OrderActionCode:O.12
+OrderSampleTypes:O.16
+OrderSampleType1:O.16.1
+OrderSampleType2:O.16.2

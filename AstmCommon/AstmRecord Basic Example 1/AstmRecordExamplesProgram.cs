@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using tgenaux.astm;
+
+using static System.Net.Mime.MediaTypeNames;
 
 namespace AstmRecord_Basic_Example_1
 {
@@ -13,89 +16,11 @@ namespace AstmRecord_Basic_Example_1
     {
         static void Main(string[] args)
         {
-            AstmCompareMessages();
+            AstmMappingMessage();
             AstmRecordCreateOrderMessage();
             AstmRecordCreateQueryMessage();
             AstmRecordParseQueryMessage();
             AstmObfuscateMessage();
-        }
-
-        static void DumpMessageContentToMarkdownTable(List<List<KeyValuePair<string, string>>> messageContent)
-        {
-            List<List<string>> meassageTables = new List<List<string>>();
-
-            foreach (var record in messageContent)
-            {
-                List<string> recordTable = new List<string>();
-
-                // Heading
-                recordTable.Add($"| Position | Value |");
-                recordTable.Add($"| -------- | --------- |");
-
-                foreach (var kvp in record)
-                {
-                    //       | Position |      Data Type            | Value |
-                    recordTable.Add($"| {kvp.Key}  | {kvp.Value} |");
-                }
-                meassageTables.Add(recordTable);
-            }
-
-            foreach (var table in meassageTables)
-            {
-                var newTable = BeautifyMarkdownTable(table);
-                Console.WriteLine(newTable);
-            }
-
-            Console.WriteLine();
-
-        }
-
-        public static string BeautifyMarkdownTable(List<string> table)
-        {
-            // Find the maximum length of each column
-            string[] temp = table[0].Trim(new char[] { '|' }).Split('|');
-            var columnCounts = table[0].Select(row => table[0].Split('|').Length - 1).ToArray();
-            var maxColumnLengths = new int[columnCounts.Max()];
-
-            for (int i = 1; i < table.Count; i++)
-            {
-                var row = table[i].Trim(new char[] { '|' });
-
-                var columns = row.Split('|');
-                for (int j = 0; j < columns.Length; j++)
-                {
-                    var value = columns[j];
-
-                    // Skip | ---- | 
-                    if (value.Trim().Trim(new char[] { '-' }).Length == 0)
-                    {
-                        continue;
-                    }
-                    maxColumnLengths[j - 1] = Math.Max(maxColumnLengths[j - 1], value.Trim().Length);
-                }
-            }
-
-            // Rebuild the table with consistent spacing
-            var builder = new StringBuilder();
-            foreach (var row in table)
-            {
-                var columns = row.Split('|');
-                for (int i = 0; i < columns.Length; i++)
-                {
-                    var column = columns[i].Trim();
-                    if (i > 0)
-                    {
-                        builder.Append("|");
-                    }
-
-                    builder.Append(' ', Math.Max(0, maxColumnLengths[i - 1] - column.Length));
-                    builder.Append(column);
-                    builder.Append(' ', Math.Max(0, maxColumnLengths[i - 1] - column.Length));
-                }
-            }
-
-            return builder.ToString();
-
         }
 
 
@@ -206,6 +131,13 @@ namespace AstmRecord_Basic_Example_1
         /// </summary>
         static void AstmRecordCreateOrderMessage()
         {
+            // TODO: Create message from an order queue.
+            // A queue will contain two patient IDs
+            // for each PID
+            // Retrieve all orders
+            // Create the Patient and Order records
+            // Send the message with Header and Trailer
+
             Console.WriteLine();
             Console.WriteLine("AstmRecord - Create Order Message");
 
@@ -344,8 +276,8 @@ namespace AstmRecord_Basic_Example_1
 
             astmRecord = new AstmRecord();
             astmRecord.Set("L.1", "L");
-            astmRecord.Set("L.2", "");
-            astmRecord.Set("L.3", "");
+            astmRecord.Set("L.2", "1");
+            astmRecord.Set("L.3", "N");
             astmMessage.Add(astmRecord.Text);
 
             Console.WriteLine(string.Join("\r\n", astmMessage));
@@ -356,7 +288,7 @@ namespace AstmRecord_Basic_Example_1
             // AstmRecord - Create Query Message
             // H|\^&|||Mini LIS|||||||P|LIS2-A|20210309155210
             // Q|1|^=W13131200096100||||||||||O
-            // L||
+            // L|1|N
         }
         #endregion
 
@@ -365,17 +297,16 @@ namespace AstmRecord_Basic_Example_1
             Console.WriteLine();
             Console.WriteLine("AstmRecord - Parse Query Message");
 
-            // AstmRecord Create Query Message
-            // H*\^&***Mini LIS*******P*LIS2-A*20210309140523
-            // Q*1*^=W13131200096100**********O
-            // L**
-
+            // AstmRecord - Parse Query Message
             string[] queryMessage =
             {
-                @"H*\^&***Mini LIS*******P*LIS2-A*2021030914052",
-                @"Q*1*^=W13131200096100**********O",
-                @"L*1*N",
+                @"H|\^&|||Mini LIS|||||||P|LIS2-A|20210309140523",
+                @"Q|1|^=W13131200096100||||||||||O",
+                @"L|1|N",
             };
+
+            Console.WriteLine(string.Join("\n", queryMessage));
+            Console.WriteLine();
 
             List<List<KeyValuePair<string, string>>> messageContent = new List<List<KeyValuePair<string, string>>>();
 
@@ -383,22 +314,17 @@ namespace AstmRecord_Basic_Example_1
             foreach (var record in queryMessage)
             {
                 Console.WriteLine(record);
+
                 astmRecord.Text = record;
                 var content = astmRecord.GetAll();
+
+                var table = AstmRecordUtilitiescs.RecordContentToMarkdownTable(content);
+                Console.WriteLine(string.Join("\n", table));
+
                 messageContent.Add(content);
             }
             Console.WriteLine();
 
-            DumpMessageContentToMarkdownTable(messageContent);
-
-            foreach (var record in messageContent)
-            {
-                foreach (var item in record)
-                {
-                    Console.WriteLine($"\"{item.Key}\" : \"{item.Value}\"");
-                }
-                Console.WriteLine();
-            }
             Console.WriteLine();
 
             // Output:
@@ -457,7 +383,6 @@ namespace AstmRecord_Basic_Example_1
 
             AstmRecord astmRecord = new AstmRecord();
 
-            // TODO pull messages from a queue and package up in a a generic messaGE CLASS OR jSON STRING.
             foreach (var record in sourceMessage)
             {
                 Console.WriteLine(record);
@@ -517,72 +442,40 @@ namespace AstmRecord_Basic_Example_1
             // L|1|N
 
         }
-
-
-        static void AstmCompareMessages()
+        static void AstmMappingMessage()
         {
-            //////////// Under Construction ////////////
-
             Console.WriteLine();
-            Console.WriteLine("Compare ASTM messages for equivalence");
+            Console.WriteLine("Astm Mapping Message");
 
-            // Compare two ASTM messages for equivalence
-            // 
-            // This technique can be used to compare two sets of messages produced from
-            // two software releases or by two different models or brands of instruments. 
-            //
-            // Before comparing two messages, set the timestamps in both messages to
-            // an equivalent value in each record; if a timestamp is incomplete, leave it intact.
-            // 
-            // Adjust timestamps in H, O, and R records. Adjust other records as required.
-            //
-            // Other fields of no concern can be set to a standard value or cleared so as
-            // not to impact the equivalency check.
-            //
-            // Demonstrate by comparing only two records.
-
-            // TODO
-            // - Before comparing two messages, set the timestamps in both to the same date.
-            // - Preferred Method: Export modified messages for comparison with beyound compare
-            // - Leave partial or empty timestamps intact
-            // - Check field count, including trailing empty fields
-            // - GetAll and compare each coresponding item in both messages
-            // - Report orphan items
-
-            string[,] sourceRecords = new string[,]
+            // Source Message
+            string[] sourceMessage =
             {
-                {
-                    @"O|1|SID305||ABO|N|20200205140222|||||||||CENTBLOOD|||||||20200205152807|||F|||||",
-                    @"O|1|SID305||ABO|N|20210309142136|||||||||CENTBLOOD|||||||20210309142229|||F|||||"
-                },
-                {
-                    @"O|1|SID305||ABO|N|20200205140222|||||||||CENTBLOOD|||||||20200205152807|||F|||||",
-                    @"O|1|SID305||ABO|N|20210309142136|||||||||CENTBLOOD|||||||20210309142229|||F|||||"
-                },
-                {
-                    @"O|1|SID305||ABO|N|20200205140222|||||||||CENTBLOOD|||||||20200205152807|||F|||||",
-                    @"O|1|SID305||ABO|N|20210309142136|||||||||CENTBLOOD|||||||20210309142229|||F|||||"
-                },
+                @"H|\^&|||Mini LIS||||||||LIS2-A|20210309155210",
+                @"P|1|PID123456|||Brown^Bobby^B|White|196501020304|M|||||PHY1001^Brewster^Katherine\PHY1002^McCoy^Leonard^H",
+                @"O|1|SID304||Type &E& Screen|N|20210309155210|||||N||||CENTBLOOD",
+                @"O|2|SID305||Pheno|N|20210309155210|||||N||||CENTBLOOD",
+                @"P|2|PID789012|||Forbin^Charles|Fisher|19410403|M|PHY1001^Brewster^Katherine\PHY1002^McCoy^Leonard^H",
+                @"O|1|SID306||ABO&R&ABScr|N|20210309155210|||||N||||CENTBLOOD",
+                @"O|2|SID307||Pheno|N|20210309155210|||||N||||CENTBLOOD",
+                @"L|1|N",
             };
 
+            AstmRecord astmRecord = new AstmRecord();
+            astmRecord.Text = sourceMessage[1]; // P[1]
 
-            Console.WriteLine("Source Records");
+            Console.WriteLine("Extract each item of information from the meassage (position and value).");
+            var recordContent = astmRecord.GetAll();
+            var table = AstmRecordUtilitiescs.RecordContentToMarkdownTable(recordContent);
+            Console.WriteLine(string.Join("\n", table));
+
+            Console.WriteLine("Translate each item of information (positions and values), into tokens and values..");
+            AstmRecordMap transMap = AstmRecordMap.ReadAstmTranslationRecordMap(new FileInfo("Vision.TransMap.txt"));
+            var recordTable = AstmRecordUtilitiescs.MappedRecordToMarkdown(recordContent, transMap);
+            Console.WriteLine(string.Join ("\n", recordTable));
+
+            //List<Dictionary<string, string>> mappedMessage2 = AstmRecordMap.RemapRecord(mappedMessage, transMap, true);
+
             Console.WriteLine();
-
-            for (int i = 0; i < sourceRecords.GetLength(0); i++) 
-            {
-                Console.WriteLine($"Left : {sourceRecords[i,0]}");
-                Console.WriteLine($"Right: {sourceRecords[i, 1]}");
-                Console.WriteLine();
-            }
-            Console.WriteLine();
-            Console.WriteLine();
-
-
-            // Output:
-            // 
-
         }
-
     }
 }
