@@ -17,209 +17,10 @@ namespace AstmRecord_Basic_Example_1
         static void Main(string[] args)
         {
             AstmMappingMessage();
-            AstmRecordCreateOrderMessage();
             AstmRecordCreateQueryMessage();
             AstmRecordParseQueryMessage();
             AstmObfuscateMessage();
         }
-
-
-        #region AstmRecordCreateOrderMessage
-
-        #region AstmRecordCreateOrderMessageContent
-
-        static KeyValuePair<string, string>[] AstmRecordCreateOrderMessageContent = new KeyValuePair<string, string>[]
-        {
-            new KeyValuePair<string, string>("newH", "newH"), // create a new H-Record
-            new KeyValuePair<string, string>("H.5", "Mini LIS"),
-
-            new KeyValuePair<string, string>("H.12", "P"),
-            new KeyValuePair<string, string>("H.13", "LIS2-A"),
-            new KeyValuePair<string, string>("H.14", "20210309155210"),
-
-            new KeyValuePair<string, string>("newP", "newP"), // create a new P-Record
-            new KeyValuePair<string, string>("P.3", "PID123456"),
-            new KeyValuePair<string, string>("P.6.1.1", "Brown"),
-            new KeyValuePair<string, string>("P.6.1.2", "Bobby"),
-            new KeyValuePair<string, string>("P.6.1.3", "B"),
-            new KeyValuePair<string, string>("P.7", "White"),
-            new KeyValuePair<string, string>("P.8", "196501020304"),
-            new KeyValuePair<string, string>("P.9", "M"),
-            new KeyValuePair<string, string>("P.10.1.1", "PHY1001"),
-            new KeyValuePair<string, string>("P.10.1.2", "Brewster"),
-            new KeyValuePair<string, string>("P.10.1.3", "Katherine"),
-            new KeyValuePair<string, string>("P.10.2.1", "PHY1002"),
-            new KeyValuePair<string, string>("P.10.2.2", "McCoy"),
-            new KeyValuePair<string, string>("P.10.2.3", "Leonard"),
-            new KeyValuePair<string, string>("P.10.2.4", "H"),
-
-            new KeyValuePair<string, string>("newO", "newO"), // create a new O-Record
-            new KeyValuePair<string, string>("O.3", "SID304"),
-            new KeyValuePair<string, string>("O.5", "Type & Screen"), // The escape character will be escaped in the record),
-            new KeyValuePair<string, string>("O.6", "N"),
-            new KeyValuePair<string, string>("O.7", "20210309155210"),
-            new KeyValuePair<string, string>("O.12", "N"),
-            new KeyValuePair<string, string>("O.16", "CENTBLOOD"),
-
-            new KeyValuePair<string, string>("newO", "newO"), // create a new O-Record
-            new KeyValuePair<string, string>("O.3", "SID305"),
-            new KeyValuePair<string, string>("O.5", "Pheno"),
-            new KeyValuePair<string, string>("O.6", "N"),
-            new KeyValuePair<string, string>("O.7", "20210309155210"),
-            new KeyValuePair<string, string>("O.12", "N"),
-            new KeyValuePair<string, string>("O.16", "CENTBLOOD"),
-
-            new KeyValuePair<string, string>("newP", "newP"), // create a new P-Record
-            new KeyValuePair<string, string>("P.3", "PID789012"),
-            new KeyValuePair<string, string>("P.6", "Forbin^Charles"),
-            new KeyValuePair<string, string>("P.6.1.1", "Forbin"),
-            new KeyValuePair<string, string>("P.6.1.2", "Charles"),
-            new KeyValuePair<string, string>("P.7", "Fisher"),
-            new KeyValuePair<string, string>("P.8", "19410403"),
-            new KeyValuePair<string, string>("P.9", "M"),
-            new KeyValuePair<string, string>("P.10.1.1", "PHY1001"),
-            new KeyValuePair<string, string>("P.10.1.2", "Brewster"),
-            new KeyValuePair<string, string>("P.10.1.3", "Katherine"),
-            new KeyValuePair<string, string>("P.10.2.1", "PHY1002"),
-            new KeyValuePair<string, string>("P.10.2.2", "McCoy"),
-            new KeyValuePair<string, string>("P.10.2.3", "Leonard"),
-            new KeyValuePair<string, string>("P.10.2.4", "H"),
-
-            new KeyValuePair<string, string>("newO", "newO"), // create a new O-Record
-            new KeyValuePair<string, string>("O.3", "SID306"),
-            new KeyValuePair<string, string>("O.5", @"ABO\ABScr"), // The repeat separator will be escaped in the record),
-            new KeyValuePair<string, string>("O.6", "N"),
-            new KeyValuePair<string, string>("O.7", "20210309155210"),
-            new KeyValuePair<string, string>("O.12", "N"),
-            new KeyValuePair<string, string>("O.16", "CENTBLOOD"),
-
-            new KeyValuePair<string, string>("newO", "newO"), // create a new O-Record
-            new KeyValuePair<string, string>("O.3", "SID307"),
-            new KeyValuePair<string, string>("O.5", "Pheno"),
-            new KeyValuePair<string, string>("O.6", "N"),
-            new KeyValuePair<string, string>("O.7", "20210309155210"),
-            new KeyValuePair<string, string>("O.12", "N"),
-            new KeyValuePair<string, string>("O.16", "CENTBLOOD"),
-
-            new KeyValuePair<string, string>("newL", "newL"), // create a new L-Record
-            new KeyValuePair<string, string>("L.3", "N"),
-        };
-
-
-        #endregion
-
-        /// <summary>
-        /// AstmRecord Example for creating an Order message
-        /// 
-        /// AstmRecord—Create Order Message creates an Order message from a list
-        /// of Key: value pairs. Each key is the location in the record where the
-        /// value is written or read.
-        /// 
-        /// Keys are written in an ASTM Record Notation. In the Key:Value pair of
-        /// P.3:PID123456, the record location is P.3 and the value is PID123456. 
-        /// 
-        /// The Key:Value of P.3:PID123456 indicates that the value should be 
-        /// written in the Patient record field P.3. 
-        /// 
-        /// The ASTM Record Notation format is Record-ID.Field.Repeat.Component. 
-        /// 
-        /// The notation can be abbreviated as follows:
-        /// 
-        /// - P.3:PID789012 - Patient record Field 3.
-        /// - O.16.2:PLASMA - Order record Field 16, Repeat Field 2 
-        /// - P.10.2.3:McCoy - Patient record Field 10, Repeat Field 2, and Component 3. 
-        /// </summary>
-        static void AstmRecordCreateOrderMessage()
-        {
-            // TODO: Create message from an order queue.
-            // A queue will contain two patient IDs
-            // for each PID
-            // Retrieve all orders
-            // Create the Patient and Order records
-            // Send the message with Header and Trailer
-
-            Console.WriteLine();
-            Console.WriteLine("AstmRecord - Create Order Message");
-
-            // AstmRecord Create Order Message
-            // H|\^&|||Mini LIS||||||||LIS2-A|20210309155210
-            // P|1|PID123456|||Brown^Bobby^B|White|196501020304|M|PHY1001^Brewster^Katherine\PHY1002^McCoy^Leonard^H
-            // O|1|SID304||Type &E& Screen|N|20210309155210|||||N||||CENTBLOOD
-            // O|2|SID305||Pheno|N|20210309155210|||||N||||CENTBLOOD
-            // P|2|PID789012|||Forbin^Charles|Fisher|19410403|M|PHY1001^Brewster^Katherine\PHY1002^McCoy^Leonard^H
-            // O|1|SID306||ABO&R&ABScr|N|20210309155210|||||N||||CENTBLOOD
-            // O|2|SID307||Pheno|N|20210309155210|||||N||||CENTBLOOD
-            // L|1|N
-
-            List<string> astmMessage = new List<string>();
-
-            AstmRecord astmRecord = new AstmRecord();
-            int patSequence = 0;
-            int orderSequence = 0;
-
-            foreach (var kvp in AstmRecordCreateOrderMessageContent)
-            {
-                if (kvp.Key.Contains("new") && astmRecord.Text.Length > 0)
-                {
-                    astmMessage.Add(astmRecord.Text);
-                }
-
-                switch (kvp.Key) 
-                {
-                    case "newH":
-                        astmRecord = new AstmRecord();
-                        astmRecord.Set("H.1", "H");
-                        astmRecord.SetDelimitersInHRecord();
-                        patSequence = 0;
-                        orderSequence = 0;
-                        break;
-
-                    case "newP":
-                        orderSequence = 0;
-
-                        astmRecord = new AstmRecord();
-                        astmRecord.Set("P.1", "P");
-                        astmRecord.Set("P.2", $"{++patSequence}");
-                        break;
-
-                    case "newO":
-                        astmRecord = new AstmRecord();
-                        astmRecord.Set("O.1", "O");
-                        astmRecord.Set("O.2", $"{++orderSequence}");
-                        break;
-
-                    case "newL":
-                        astmRecord = new AstmRecord();
-                        astmRecord.Set("L.1", "L");
-                        astmRecord.Set("L.2", "1");
-                        break;
-
-                    default:
-                        astmRecord.Set(kvp.Key, kvp.Value);
-                        break;
-                }
-            }
-            if (astmRecord.Text.Length > 0)
-            {
-                astmMessage.Add(astmRecord.Text);
-            }
-
-            Console.WriteLine(string.Join("\r\n", astmMessage));
-            Console.WriteLine();
-
-            // Output:
-            // 
-            // AstmRecord - Create Order Message
-            // H|\^&|||Mini LIS|||||||P|LIS2-A|20210309155210
-            // P|1|PID123456|||Brown^Bobby^B|White|196501020304|M|PHY1001^Brewster^Katherine\PHY1002^McCoy^Leonard^H
-            // O|1|SID304||Type &E& Screen|N|20210309155210|||||N||||CENTBLOOD
-            // O|2|SID305||Pheno|N|20210309155210|||||N||||CENTBLOOD
-            // P|2|PID789012|||Forbin^Charles|Fisher|19410403|M|PHY1001^Brewster^Katherine\PHY1002^McCoy^Leonard^H
-            // O|1|SID306||ABO&R&ABScr|N|20210309155210|||||N||||CENTBLOOD
-            // O|2|SID307||Pheno|N|20210309155210|||||N||||CENTBLOOD
-            // L|1|N
-        }
-        #endregion
 
 
         #region AstmRecordCreateQueryMessage
@@ -487,6 +288,7 @@ namespace AstmRecord_Basic_Example_1
 
             //  Extract all message content from each record as Position/Value pairs
             List<List<KeyValuePair<string, string>>> messageContent = new List<List<KeyValuePair<string, string>>>();
+
             messageContent = ParseAstmMessage.ExtractMessageContent(sourceMessage.ToList());
             var messageTables = AstmRecordUtilitiescs.MessageContentToMarkdownTable(messageContent);
 
@@ -501,7 +303,12 @@ namespace AstmRecord_Basic_Example_1
             messageTables = AstmRecordUtilitiescs.MessageContentToMarkdownTable(messageContent);
 
             // Create ASTM message from message content Position/Value pairs
-            // Create method to do this
+            var newMessage1 = ParseAstmMessage.CreateMessage(messageContent);
+            Console.WriteLine(string.Join("\n", newMessage1));
+            Console.WriteLine();
+            var newMessage2 = ParseAstmMessage.CreateMessage(messageContent, @"%\^&");
+            Console.WriteLine(string.Join("\n", newMessage2));
+
 
             Console.WriteLine();
 

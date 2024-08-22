@@ -84,7 +84,11 @@ namespace tgenaux.astm
         /// </summary>
         public string Text
         {
-            get { return GetText(); }
+            get 
+            { 
+                SetDelimitersInHRecord();
+                return GetText(); 
+            }
             set { ParseFields(value); }
         }
 
