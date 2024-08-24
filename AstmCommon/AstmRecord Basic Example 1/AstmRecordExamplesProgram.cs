@@ -7,8 +7,11 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using tgenaux.astm;
+using Newtonsoft.Json;
 
 using static System.Net.Mime.MediaTypeNames;
+using Newtonsoft.Json.Linq;
+using System.Security.Policy;
 
 namespace AstmRecord_Basic_Example_1
 {
@@ -16,7 +19,7 @@ namespace AstmRecord_Basic_Example_1
     {
         static void Main(string[] args)
         {
-            AstmMappingMessage();
+            AstmConveertMessageToJson();
             AstmRecordCreateQueryMessage();
             AstmRecordParseQueryMessage();
             AstmObfuscateMessage();
@@ -243,7 +246,7 @@ namespace AstmRecord_Basic_Example_1
             // L|1|N
 
         }
-        static void AstmMappingMessage()
+        static void AstmConveertMessageToJson()
         {
             Console.WriteLine();
             Console.WriteLine("Extracting Astm Record Contnet");
@@ -286,20 +289,92 @@ namespace AstmRecord_Basic_Example_1
             Console.WriteLine(string.Join("\n", recordTable));
             Console.WriteLine();
 
+
             //  Extract all message content from each record as Position/Value pairs
             List<List<KeyValuePair<string, string>>> messageContent = new List<List<KeyValuePair<string, string>>>();
 
             messageContent = ParseAstmMessage.ExtractMessageContent(sourceMessage.ToList());
             var messageTables = AstmRecordUtilitiescs.MessageContentToMarkdownTable(messageContent);
 
+            // TODO save as a Json file?
+            var jsonArray = new JArray();
+            foreach (var list in messageContent)
+            {
+                var jsonObject2 = new JObject();
+                foreach (var pair in list)
+                {
+                    jsonObject2[pair.Key] = pair.Value;
+                }
+                jsonArray.Add(jsonObject2);
+            }
+
+
+
             // Translate all message content from Position/Value to Token/Value pairs
             messageContent = AstmRecordMap.RemapMessageContent(messageContent, transMap);
+
+
+            // TODO
+            // Iterate over the sourceMessage
+            // Convert to a Json message, such that each patient is one object with all orders nested within it
+            // Components should be written as a new named objects
+            // Timestamps should be converted to DatTime before adding them?
+
+            Dictionary<string, string> recordTypes = new Dictionary<string, string>();
+            recordTypes["H"] = "Header";
+            recordTypes["P"] = "Patient";
+            recordTypes["O"] = "Order";
+            recordTypes["L"] = "TerminationCode";
+
+            var jsaonMessage = jsonArray.ToString();
+
+            var jsonObject = new JObject();
+            foreach (var record in sourceMessage)
+            {
+                astmRecord = new AstmRecord();
+                astmRecord.Text = record;
+                var content = astmRecord.GetAll();
+                var mapped = AstmRecordMap.RemapRecordContent(content, transMap);
+
+                var recordType = astmRecord.RecordType; 
+                // If Hedder, add header object with sender and reciever information plus timestamp
+                // If L-record, capture code if available
+
+                // if patient, iterate through subrecords under the patient, adding as new objects
+                var listName = $"{recordTypes[astmRecord.RecordType]}";
+                var jObject = new JObject();
+                foreach (var pair in mapped)
+                {
+                    jObject[pair.Key] = pair.Value;
+                }
+                jsonObject[listName] = jObject;
+
+            }
+            var jsaonMessage2 = jsonObject.ToString();
+
+            // Something to think about for converting to Json
+            //
+            // List<int> Position = 0;   ? update each loop
+            // JsonMessage
+            //  var msgjObject = new JObject();
+            //
+            // foreach AstmRecord Record in Message
+            //     AstmRecord astmRecord
+            //     
+            //     foreach AstmRecord Field in Record
+            //         AstmRecord field;
+            //         
+            //         foreach Repeat in field
+            //             AstmRecord repeat;
+            // 
+            //             foreach Componet
+            //                 AstmRecord componet;
+            // 
 
             messageTables = AstmRecordUtilitiescs.MessageContentToMarkdownTable(messageContent);
 
             // Translate all message content from Token/Value to Position/Value pairs
             messageContent = AstmRecordMap.RemapMessageContent(messageContent, transMap);
-
             messageTables = AstmRecordUtilitiescs.MessageContentToMarkdownTable(messageContent);
 
             // Create ASTM message from message content Position/Value pairs
