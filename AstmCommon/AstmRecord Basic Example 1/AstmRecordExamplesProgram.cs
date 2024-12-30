@@ -313,7 +313,6 @@ namespace AstmRecord_Basic_Example_1
             // Translate all message content from Position/Value to Token/Value pairs
             messageContent = AstmRecordMap.RemapMessageContent(messageContent, transMap);
 
-
             // TODO
             // Iterate over the sourceMessage
             // Convert to a Json message, such that each patient is one object with all orders nested within it
