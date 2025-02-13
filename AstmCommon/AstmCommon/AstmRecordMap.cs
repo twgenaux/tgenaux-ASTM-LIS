@@ -49,6 +49,20 @@ namespace tgenaux.astm
             Map = new Dictionary<string, string>();
         }
 
+        public AstmRecordMap(List<KeyValuePair<string, string>> keyValuePairs)
+        {
+            Map = new Dictionary<string, string>();
+
+            foreach (var kvp in keyValuePairs)
+            {
+                if (!Map.Keys.Contains(kvp.Key))
+                {
+                    Map.Add(kvp.Key, kvp.Value);
+                }
+            }
+
+        }
+
         public List<string> ToList()
         {
             List<string> list = new List<string>();
@@ -92,6 +106,9 @@ namespace tgenaux.astm
             }
             return translatedRecordMap;
         }
+
+
+
         public static List<List<KeyValuePair<string, string>>> RemapMessageContent
             (
             List<List<KeyValuePair<string, string>>> sourceMessage,

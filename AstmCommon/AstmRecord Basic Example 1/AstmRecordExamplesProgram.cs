@@ -19,7 +19,7 @@ namespace AstmRecord_Basic_Example_1
     {
         static void Main(string[] args)
         {
-            AstmConveertMessageToJson();
+            AstmConveertRecordToJson();
             AstmRecordCreateQueryMessage();
             AstmRecordParseQueryMessage();
             AstmObfuscateMessage();
@@ -246,7 +246,7 @@ namespace AstmRecord_Basic_Example_1
             // L|1|N
 
         }
-        static void AstmConveertMessageToJson()
+        static void AstmConveertRecordToJson()
         {
             Console.WriteLine();
             Console.WriteLine("Extracting Astm Record Contnet");
@@ -265,6 +265,8 @@ namespace AstmRecord_Basic_Example_1
                 @"L|1|N",
             };
 
+
+
             AstmRecord astmRecord = new AstmRecord();
             astmRecord.Text = sourceMessage[1]; // P[1]
 
@@ -272,6 +274,7 @@ namespace AstmRecord_Basic_Example_1
             Console.WriteLine(astmRecord.Text);
             Console.WriteLine();
 
+            astmRecord.SupressTopLevel = false;
             var recordContent = astmRecord.GetAll();
             var table = AstmRecordUtilitiescs.RecordContentToMarkdownTable(recordContent);
             Console.WriteLine(string.Join("\n", table));
@@ -308,10 +311,21 @@ namespace AstmRecord_Basic_Example_1
                 jsonArray.Add(jsonObject2);
             }
 
+            astmRecord = new AstmRecord();
+            astmRecord.SupressTopLevel = false;
+
+            List<string> patientContent = new List<string>();
+            patientContent = File.ReadAllLines("PatientTransMap.txt").ToList();
+            
+            foreach (var line in patientContent)
+            {
+                string[] parts = line.Split(':');
+                astmRecord.Set(parts[0], parts[1]);
+            }
 
 
             // Translate all message content from Position/Value to Token/Value pairs
-            messageContent = AstmRecordMap.RemapMessageContent(messageContent, transMap);
+            //messageContent = AstmRecordMap.RemapMessageContent(messageContent, transMap);
 
             // TODO
             // Iterate over the sourceMessage
@@ -325,29 +339,51 @@ namespace AstmRecord_Basic_Example_1
             recordTypes["O"] = "Order";
             recordTypes["L"] = "TerminationCode";
 
+            AstmRecordMap patientMap = AstmRecordMap.ReadAstmTranslationRecordMap(new FileInfo("PatientTransMap.txt"));
+
+            // TODO Replace this with a file that includes
+            //string patientMap = @"P|SeqNumber|PatientID|PatientIDLab|PatientID3" + 
+            //    @"|LastName^FirstName^MI|MothersMaiden|BirthDate|Sex||||" +
+            //    @"|Attending-ID^Attending-LastName^Attending-FirstName^Attending-MI" +
+            //    @"\Attending-ID2^Attending-LastName2^Attending-FirstName2^Attending-MI2";
+
+            //astmRecord = new AstmRecord();
+            //astmRecord.SupressTopLevel = false;
+            //astmRecord.Text = patientMap;
+            //var temp = astmRecord.GetAll();
+            //AstmRecordMap patientTransMap = new AstmRecordMap(temp);
+
+
             var jsaonMessage = jsonArray.ToString();
 
             var jsonObject = new JObject();
             foreach (var record in sourceMessage)
             {
                 astmRecord = new AstmRecord();
+                astmRecord.SupressTopLevel = false;
                 astmRecord.Text = record;
                 var content = astmRecord.GetAll();
-                var mapped = AstmRecordMap.RemapRecordContent(content, transMap);
+                //var mapped = AstmRecordMap.RemapRecordContent(content, transMap);
 
-                var recordType = astmRecord.RecordType; 
-                // If Hedder, add header object with sender and reciever information plus timestamp
+                var recordType = astmRecord.RecordType;
+                // If Headder, add header object with sender and reciever information plus timestamp
                 // If L-record, capture code if available
 
-                // if patient, iterate through subrecords under the patient, adding as new objects
-                var listName = $"{recordTypes[astmRecord.RecordType]}";
-                var jObject = new JObject();
-                foreach (var pair in mapped)
+                if (recordType == "P")
                 {
-                    jObject[pair.Key] = pair.Value;
-                }
-                jsonObject[listName] = jObject;
+                    var mapped = AstmRecordMap.RemapRecordContent(content, patientMap);
 
+                    // if patient, iterate through subrecords under the patient, adding as new objects
+                    var listName = $"{recordTypes[astmRecord.RecordType]}";
+                    var jObject = new JObject();
+                    foreach (var pair in mapped)
+                    {
+                        // FIlter out record type ID
+                        // Extract two Attending and parse them into a list of mapped types
+                        jObject[pair.Key] = pair.Value;
+                    }
+                    jsonObject[listName] = jObject;
+                }
             }
             var jsaonMessage2 = jsonObject.ToString();
 
@@ -388,4 +424,5 @@ namespace AstmRecord_Basic_Example_1
 
         }
     }
+    
 }

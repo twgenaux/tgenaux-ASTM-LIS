@@ -101,7 +101,7 @@ namespace tgenaux.astm
         public int Count { get { return Fields.Count; } }
 
 
-        bool SupressTopLevel { get; set; } = true;
+        public bool SupressTopLevel { get; set; } = true;
 
         public AstmRecord()
         {

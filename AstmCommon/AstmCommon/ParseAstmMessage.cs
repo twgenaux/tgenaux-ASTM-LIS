@@ -8,7 +8,7 @@ namespace tgenaux.astm
 {
     public class ParseAstmMessage
     {
-        public static List<List<KeyValuePair<string, string>>> ExtractMessageContent(List<string> message)
+        public static List<List<KeyValuePair<string, string>>> ExtractMessageContent(List<string> message, bool supressTopLevel = false)
         {
             List<List<KeyValuePair<string, string>>> messageContent = new List<List<KeyValuePair<string, string>>>();
             AstmRecord astmRecord = new AstmRecord();
@@ -16,6 +16,7 @@ namespace tgenaux.astm
             foreach (var record in message)
             {
                 astmRecord = new AstmRecord();
+                astmRecord.SupressTopLevel = supressTopLevel;
                 astmRecord.Text = record;
                 var recordContent = astmRecord.GetAll();
                 messageContent.Add(recordContent);

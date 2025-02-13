@@ -1,4 +1,5 @@
 P.1:P-RecordType
+<<<<<<< Updated upstream
 P.2:P-SeqNumber
 P.3:P-PatientID
 P.4:P-PatientIDLab
@@ -19,3 +20,25 @@ P.14.2.1:P-Attending2-ID
 P.14.2.2:P-Attending2-Last
 P.14.2.3:P-Attending2-First
 P.14.2.4:P-Attending2-MI
+=======
+P.2:SeqNumber
+P.3:PatientID
+P.4:PatientIDLab
+P.5:PatientID3
+P.6:PatientName
+P.6.1.1:LastName
+P.6.1.2:FirstName
+P.6.1.3:MI
+P.7:MothersMaiden
+P.8:BirthDate
+P.9:Sex
+P.14:Attending
+P.14.1.1:Attending-ID
+P.14.1.2:Attending-LastName
+P.14.1.3:Attending-FirstName
+P.14.1.4:Attending-MI
+P.14.2.1:Attending-ID
+P.14.2.2:Attending-LastName
+P.14.2.3:Attending-FirstName
+P.14.2.4:Attending-MI
+>>>>>>> Stashed changes
