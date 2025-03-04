@@ -234,6 +234,21 @@ namespace tgenaux.astm
             return map;
         }
 
+        public static void SaveMessageMap(List<AstmRecordMap> messageMap, string mapFile)
+        {
+            using (var sw = new StreamWriter(mapFile))
+            {
+                foreach (var map in messageMap)
+                {
+                    foreach (var key in map.Map.Keys)
+                    {
+                        sw.WriteLine($"{key}:{map.Map[key]}");
+                    }
+                }
+            }
+        }
+
+
         /// <summary>
         /// SaveRecordMap
         /// </summary>

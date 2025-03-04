@@ -62,7 +62,7 @@ namespace tgenaux.astm
         public string Separators { get; set; } = @"|\^";
 
         /// <summary>
-        /// The escape delimiter. Used to escape seporators/seperators in text fields
+        /// The escape delimiter. Used to escape separators in text fields
         /// </summary>
         public string Escape { get; set; } = @"&";
 

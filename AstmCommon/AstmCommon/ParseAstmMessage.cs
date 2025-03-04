@@ -31,7 +31,7 @@ namespace tgenaux.astm
         /// data objects associated with the order.
         ///  - Patient demographics
         ///  - Requested tests
-        ///  - Histroical results
+        ///  - Historical results
         /// </summary>
         /// <param name="messageContent"></param>
         /// <returns></returns>

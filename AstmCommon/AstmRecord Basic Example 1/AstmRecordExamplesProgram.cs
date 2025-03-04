@@ -19,10 +19,11 @@ namespace AstmRecord_Basic_Example_1
     {
         static void Main(string[] args)
         {
-            AstmConveertRecordToJson();
-            AstmRecordCreateQueryMessage();
+            // AstmConveertRecordToJson();
+            // AstmRecordCreateQueryMessage();
             AstmRecordParseQueryMessage();
-            AstmObfuscateMessage();
+            AstmRecord5600Message();
+            // AstmObfuscateMessage();
         }
 
 
@@ -152,6 +153,55 @@ namespace AstmRecord_Basic_Example_1
             // L.1 : L
             // L.2 : 1
             // L.3 : N
+        }
+        static void AstmRecord5600Message()
+        {
+            Console.WriteLine();
+            Console.WriteLine("AstmRecord - Parse Query Message");
+
+            // AstmRecord - Parse Query Message
+            string[] refMessage =
+            {
+                @"H|\^&|||LITT||||||||LIS2-A|20061214093913",
+                @"P|1|U000856|||ORR^ABIGAIL^G||19780407|F||843 TALL OAKS DR^HAILVILLE, MD 45831|||RASHAMDRA^SANJAY^V|S|||||||||||U7",
+                @"C|1|N|Patient is complaining of shortness of breath and chest pain.|G",
+                @"O|1|S4331009704||^^^1.0+300+1.0\300+2.0\001+1.0|R||20061214093913||||N||||5||||||||||O",
+                @"O|2|U4331009704||^^^1.0+301+1.0|R||20061214093913||||N||||3||||||||||O",
+                @"L|1|N",
+            };
+
+            Console.WriteLine(string.Join("\n", refMessage));
+            Console.WriteLine();
+
+            List<List<KeyValuePair<string, string>>> messageContent = new List<List<KeyValuePair<string, string>>>();
+            List<AstmRecordMap> messageMap = new List<AstmRecordMap>();
+
+            AstmRecord astmRecord = new AstmRecord();
+            foreach (var record in refMessage)
+            {
+                Console.WriteLine(record);
+
+                astmRecord.Text = record;
+                var content = astmRecord.GetAll();
+                AstmRecordMap newMap = new AstmRecordMap(content);
+                messageMap.Add(newMap);
+
+
+                var table = AstmRecordUtilitiescs.RecordContentToMarkdownTable(content);
+                Console.WriteLine(string.Join("\n", table));
+
+                messageContent.Add(content);
+               
+            }
+            AstmRecordMap.SaveMessageMap(messageMap, @"E:\5600RecordMap.txt");
+
+            AstmRecordMap transMap = AstmRecordMap.ReadAstmTranslationRecordMap(new FileInfo("5600TransMap.txt"));
+
+             var mappedContent = AstmRecordMap.RemapMessageContent(messageContent, transMap);
+          
+            Console.WriteLine();
+
+            Console.WriteLine();
         }
 
         static void AstmObfuscateMessage()
