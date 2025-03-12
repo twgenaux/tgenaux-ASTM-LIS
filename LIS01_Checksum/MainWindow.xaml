@@ -1,0 +1,32 @@
+﻿<Window x:Class="AstmChecksum.MainWindow" x:Name="mainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Icon="AstmChecksum.ico"
+        Title="LIS1-A / ASTM E1381 Frame Checksum Calculator" Height="397" Width="970" Loaded="mainWindow_Loaded">
+    <Grid Height="356" Width="946">
+        <TextBox Name="frameTextBox" HorizontalScrollBarVisibility="Auto" Height="auto" HorizontalAlignment="Left" Margin="12,48,0,0" VerticalAlignment="Top" Width="922" AcceptsTab="True" TextChanged="frameTextBox_TextChanged" />
+        <TextBox Name="hexBox" Background="LightGray" IsReadOnly="true" HorizontalScrollBarVisibility="Auto" Height="auto" HorizontalAlignment="Left" Margin="12,106,0,0" VerticalAlignment="Top" Width="922" />
+        <TextBox Name="beautifiedBox" Background="LightGray" Height="auto" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Auto" IsReadOnly="true" Margin="11,168,0,0" VerticalAlignment="Top" Width="922" />
+        <TextBox Name="checksumTextBox" Height="31" HorizontalAlignment="Left" Margin="894,232,0,0" VerticalAlignment="Top" Width="40" IsReadOnly="True" />
+        <Label Content="Checksum:" Height="31" HorizontalAlignment="Left" Margin="815,232,0,0" Name="label5" VerticalAlignment="Top" Width="67" />
+        <Label Content="Frame from log:" Height="28" HorizontalAlignment="Left" Margin="12,6,0,0" Name="label6" VerticalAlignment="Top" Width="210" />
+        <Button Name="characterMapButton" Click="characterMapButton_Click" Content="Character Map" Height="31" HorizontalAlignment="Left" Margin="416,290,0,0" VerticalAlignment="Top" Width="147" />
+        <ComboBox Name="encodingComboBox" Height="31" HorizontalAlignment="Left" Margin="12,232,0,0" VerticalAlignment="Top" Width="490" SelectionChanged="encodingComboBox_SelectionChanged">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid ShowGridLines="true">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="160"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding CodePage}" />
+                        <TextBlock Grid.Column="1" Text="{Binding BodyName}" />
+                        <TextBlock Grid.Column="2" Text="{Binding EncodingName}" />
+                    </Grid>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Image Source="TheronGenaux-2.png" Height="24" HorizontalAlignment="Left" Margin="826,322,0,0" Name="image1" Stretch="Fill" VerticalAlignment="Top" Width="107" />
+    </Grid>
+</Window>
